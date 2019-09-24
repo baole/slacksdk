@@ -1,0 +1,33 @@
+package com.anttek.slack.model
+
+class Channel (
+    var isPrivate: Boolean,
+    var acceptedUser: String? = null,
+    var purpose: ChannelPurpose,
+    var isMoved: Long? = null,
+    var isPendingExtShared: Boolean? = null,
+    var unreadCount: Long? = null,
+    var pendingShared: ArrayList<String>? = null,
+    var isChannel: Boolean,
+    var isShared: Boolean,
+    var members: ArrayList<String>,
+    var isReadOnly: Boolean? = null,
+    var id: String,
+    var previousNames: ArrayList<String>? = null,
+    var latest: Any? = null,
+    var lastRead: String? = null,
+    var creator: String,
+    var isMember: Boolean? = null,
+    var isMpim: Boolean,
+    var created: Long,
+    var nameNormalized: String,
+    var priority: Double? = null,
+    var unreadCountDisplay: Long? = null,
+    var unlinked: Long? = null,
+    var isArchived: Boolean? = null,
+    var isGeneral: Boolean? = null,
+    var numMembers: Long? = null,
+    var name: String,
+    var topic: ChannelTopic,
+    var isOrgShared: Boolean
+)

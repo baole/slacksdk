@@ -1,0 +1,4 @@
+rootProject.name = 'Slack'
+include 'app'
+include 'tool'
+

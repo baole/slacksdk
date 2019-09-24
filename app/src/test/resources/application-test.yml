@@ -1,0 +1,68 @@
+server:
+  port: 7070
+spring:
+  flyway:
+    enabled: false
+  datasource:
+    url: jdbc:mysql://localhost:3306/mon?useLegacyDatetimeCode=false&serverTimezone=UTC&useUnicode=yes&character_set_server=utf8mb4
+    username: root
+    password: root
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    initSQL: "SET NAMES 'utf8mb4' COLLATE 'utf8mb4_unicode_ci'"
+  jpa:
+    hibernate:
+      ddl-auto: update
+      dialect: org.hibernate.dialect.MySQL5Dialect
+      show-sql: true
+      use-new-id-generator-mappings: false
+      properties:
+        hibernate:
+          format_sql: true
+    database: mysql
+  devtools:
+    livereload:
+      enabled: true
+
+  cache:
+    type: redis
+  redis:
+    host: 34.67.212.221
+    port: 6379
+    password: wKQhJNdwSm3U
+
+  data:
+    redis:
+      repositories:
+        enabled: false
+  autoconfigure:
+    exclude: org.springframework.boot.autoconfigure.data.redis.RedisRepositoriesAutoConfiguration
+  main:
+    allow-bean-definition-overriding: true
+
+# Jwt token
+# ttl in second
+jwt:
+  secret: FsEGzJq8lVif0TCcORRo
+  ttl: 2592000000 # 1 month
+  ttl-refresh: 15552000000 # 6 months
+  ttl-button-setting: 15552000000 # 6 months
+
+slack:
+  #HR dev
+  client_id: "4878724429.735012519858"
+  client_secret: ff3fa54ee45d4a0e7573628b9bf299b5
+  redirect_uri: http://localhost:4200
+  endpoint: https://slack.com/api/
+
+cloudtask:
+  #    queue_name: projects/alicedev9/locations/us-central1/queues/default
+  #    task_prefix: projects/alicedev9/locations/us-central1/queues/default/tasks/
+  queue_name: projects/standupbot2017/locations/us-central1/queues/default
+  task_prefix: projects/standupbot2017/locations/us-central1/queues/default/tasks/
+
+stripe:
+  api_key: sk_test_QA6RQP94Dzbym9JBYYy1TjRR
+  client_id: pk_test_qXZqZGK4pCnpwCO9tosXIz43
+
+ext:
+  webapp_url_base: "http://localhost:4200"

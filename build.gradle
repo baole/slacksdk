@@ -1,0 +1,50 @@
+buildscript {
+    repositories {
+        jcenter()
+    }
+
+    ext {
+        spring_boot_version = '2.1.2.RELEASE'
+        spring_version = '5.1.6.RELEASE'
+        kotlin_version = '1.3.50'
+        kotlin_reflect_version = '1.3.50'
+        kotlin_corroutine_version = '1.2.1'
+        java_version = '1.8'
+        java_test_version = java_version
+
+        spring_jwt_version = "1.0.10.RELEASE"
+        jjwt_version = "0.9.1"
+
+        appengine_version = "1.29.1"
+        appengine_plusin_version = "1.3.5"
+        cloud_task_version = "v2beta3+"
+        mysql_version = "6.0.5"
+        cloud_sql_version = "1.0.4"
+        protocol_buff_version = "3.6.1"
+
+        stripe_version = "10.14.0"
+        mailjet_version = "4.1.1"
+        thymeleaf_version = "3.0.11.RELEASE"
+
+        retrofit_version = '2.6.0'
+        okhttp_version = "3.14.2"
+        jackson_version = "2.9.0"
+
+        flyway_version = '5.2.3'
+        junit_verison = "4.12"
+        apache_commons_version = "3.8.1"
+        dbunit = "2.6.0"
+    }
+
+    dependencies {
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+        classpath "org.jetbrains.kotlin:kotlin-allopen:$kotlin_version"
+        classpath "org.jetbrains.kotlin:kotlin-noarg:$kotlin_version"
+    }
+}
+
+configure(allprojects) {
+    // common dependencies for all projects
+    dependencies {
+    }
+}
