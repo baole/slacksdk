@@ -58,7 +58,7 @@ public class CodeGeneratorV2 {
     public void generateWithDefault(String schemaPath) throws IOException {
         setJsonSchemaFile(schemaPath);
         setOutputDir("slack-api/src/main/java");
-        String packagePrefix = "com.anttek.slack";
+        String packagePrefix = "com.anttek.slack.api";
         setPackageName(packagePrefix);
 
         File src = new File(outputDir, packagePrefix.replace(".", "/"));
@@ -86,8 +86,8 @@ public class CodeGeneratorV2 {
 
         PrintStream psa = new PrintStream(new FileOutputStream(new File(outdir, "SlackApi.kt")));
         writeActionClassPackage(psa);
-        printString(psa, "import com.anttek.slack.request.*");
-        printString(psa, "import com.anttek.slack.response.*");
+        printString(psa, "import %s.request.*", packageName);
+        printString(psa, "import %s.response.*", packageName);
         printString(psa);
         printString(psa, "class SlackApi(private val service: SlackService, private val mapper: Mapper, private var token: String = \"\") : BaseSlackApi() {");
         printString(psa, "    fun token(token: String): SlackApi {");
@@ -225,7 +225,7 @@ public class CodeGeneratorV2 {
         outdir.mkdirs();
         PrintStream ps = new PrintStream(new FileOutputStream(new File(outdir, classname + ".kt")));
 
-        printString(ps, "package com.anttek.slack.request");
+        printString(ps, "package %s.request", packageName);
         printString(ps, "");
         printStringS(ps, "%sclass %s (", params.size() > 0 ? "data " : "", classname);
 
@@ -341,8 +341,8 @@ public class CodeGeneratorV2 {
 
     private void writeActionClassImport(PrintStream ps) {
         ps.println("import " + packageName + ".model.*");
-        ps.println("import com.anttek.slack.request.*");
-        ps.println("import com.anttek.slack.response.*");
+        printString(ps, "import %s.request.*", packageName);
+        printString(ps, "import %s.response.*", packageName);
         ps.println("import retrofit2.Call");
         ps.println("import retrofit2.http.Header");
         ps.println("import retrofit2.http.GET");
@@ -704,7 +704,7 @@ public class CodeGeneratorV2 {
         if (item.isModel) {
 
         } else {
-            ps.println("import com.anttek.slack.model.*");
+            printString(ps, "import %s.model.*", packageName);
         }
         ps.println();
     }

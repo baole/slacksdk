@@ -1,8 +1,6 @@
 package com.anttek.slack
 
-import com.anttek.slack.api.DefaultMapper
-import com.anttek.slack.api.Slack
-import com.anttek.slack.api.request.ChatPostMessageRequest
+import com.anttek.slack.request.ChatPostMessageRequest
 
 object SlackTest {
     @JvmStatic
@@ -15,7 +13,7 @@ object SlackTest {
 //        }
 
         val chatPostMessageRequest = ChatPostMessageRequest(text = "Hellooo", channel = "C04RUMAGP")
-        api.chatPostMessage(chatPostMessageRequest).result?.let {
+        api.chatPost(chatPostMessageRequest).result?.let {
             println(it)
         }
     }

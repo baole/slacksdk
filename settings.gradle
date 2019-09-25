@@ -1,4 +1,5 @@
 rootProject.name = 'Slack'
 include 'slack-api'
+include 'slack-callback'
 include 'tool'
 
