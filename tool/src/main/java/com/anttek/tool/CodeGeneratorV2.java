@@ -16,11 +16,11 @@ import java.io.IOException;
 import java.io.PrintStream;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
+import java.util.function.Consumer;
 
 /**
+ *
  */
 public class CodeGeneratorV2 {
 
@@ -57,10 +57,15 @@ public class CodeGeneratorV2 {
 
     public void generateWithDefault(String schemaPath) throws IOException {
         setJsonSchemaFile(schemaPath);
-        setOutputDir("app/src/main/java");
+        setOutputDir("slack-api/src/main/java");
         String packagePrefix = "com.anttek.slack";
         setPackageName(packagePrefix);
-        FileUtils.deleteDirectory(new File(outputDir, packagePrefix.replace(".", "/")));
+
+        File src = new File(outputDir, packagePrefix.replace(".", "/"));
+        FileUtils.deleteDirectory(new File(src, "model"));
+        FileUtils.deleteDirectory(new File(src, "response"));
+        FileUtils.deleteDirectory(new File(src, "request"));
+
 
         JSONObject jsonObject = new JSONObject(readFile(jsonSchemaFile));
         generateDefinitions(jsonObject);
@@ -73,54 +78,168 @@ public class CodeGeneratorV2 {
 
         File outdir = new File(outputDirFile, packageName.replace(".", "/"));
         outdir.mkdirs();
-        PrintStream ps = new PrintStream(new FileOutputStream(new File(outdir, "SlackApi.kt")));
+        PrintStream ps = new PrintStream(new FileOutputStream(new File(outdir, "SlackService.kt")));
         writeActionClassPackage(ps);
         writeActionClassImport(ps);
-        ps.println("interface SlackApi {");
+        printString(ps, "interface SlackService {");
+
+
+        PrintStream psa = new PrintStream(new FileOutputStream(new File(outdir, "SlackApi.kt")));
+        writeActionClassPackage(psa);
+        printString(psa, "import com.anttek.slack.request.*");
+        printString(psa, "import com.anttek.slack.response.*");
+        printString(psa);
+        printString(psa, "class SlackApi(private val service: SlackService, private val mapper: Mapper, private var token: String = \"\") : BaseSlackApi() {");
+        printString(psa, "    fun token(token: String): SlackApi {");
+        printString(psa,"         this.token = token");
+        printString(psa, "        return this");
+        printString(psa, "    }");
+        printString(psa);
+        printString(psa, "    private fun authen() = \"Bearer $token\"");
+        printString(psa);
 
         for (String key : jsonPaths.keySet()) {
-            generateMethod(ps, key, jsonPaths.getJSONObject(key));
+            generateMethod(ps, psa, key, jsonPaths.getJSONObject(key));
         }
-        ps.println("}");
+
+        printString(ps, "}");
+        printString(psa, "}");
     }
 
-    private void generateMethod(PrintStream ps, String key, JSONObject json) throws IOException {
+    private void generateMethod(PrintStream ps, PrintStream psa, String key, JSONObject json) throws IOException {
         if (json.has("get")) {
-            generateMethod(ps, key, json.getJSONObject("get"), true);
+            generateMethod(ps, psa, key, json.getJSONObject("get"), true);
         }
         if (json.has("post")) {
-            generateMethod(ps, key, json.getJSONObject("post"), false);
+            generateMethod(ps, psa, key, json.getJSONObject("post"), false);
         }
     }
 
-    private void generateMethod(PrintStream ps, String key, JSONObject json, boolean isGet) {
+    private void generateMethod(PrintStream ps, PrintStream psa, String key, JSONObject json, boolean isGet) throws IOException{
         String title = json.getString("operationId");
         String classname = makeClassName(title + "Response");
 
         JSONArray jsonParams = json.getJSONArray("parameters");
 
-        printString(ps, "    @%s(\"%s\")", getHttpMethod(isGet), json.getString("operationId"));
+        printString(ps, "    @%s(\"%s\")", getHttpMethod(isGet), key.substring(1));
         printStringS(ps, "    fun %s(", makeFieldName(title));
+        String name = makeClassName(key.substring(1).replace(".", "_")) + "Request";
+
+        printStringS(psa, "    fun %s(", makeFieldName(title));
+
+        if (isGet) {
+//            printStringS(ps, "@QueryMap request: %s", name);
+        } else {
+            printStringS(ps, "@Header(\"Authorization\") authorization: String, @Body request: %s", name);
+            printString(ps, "): Call<%s>", classname);
+            printString(ps, "");
+
+            printString(psa, "request: %s): SlackResponse<%s> {", makeClassName(title) + "Request", makeClassName(title) + "Response" );
+        }
+
+
         int paramCount = jsonParams.length();
-        boolean isFirst = true;
+        ArrayList<RetrofitParam> params = new ArrayList<>();
         for (int i = 0; i < paramCount; i++) {
             Type type = resolveType(jsonParams.getJSONObject(i));
             if (type.in.equals("query") || type.in.equals("formData")) {
-                if (!isFirst) {
-                    printString(ps, ",");
-                    printStringS(ps, "                                ");
-                }
-
-                printStringS(ps, "@Query(\"%s\") %s: %s", type.name, makeFieldName(type.name), type.getType());
-                isFirst = false;
+                params.add(new RetrofitParam(type.name, type.getType(), "Query"));
+            } else if (type.in.equals("header")) {
+                params.add(new RetrofitParam(type.name, type.getType(), "Header"));
             } else {
                 System.err.println("Warning: resolveType: retrofit param " + type.in);
             }
         }
 
+        boolean hasToken = false;
+        ArrayList<RetrofitParam> pr = new ArrayList<>();
+        for (RetrofitParam param : params) {
+            if (param.getAnnoType().equals("Header") || param.getTypeName().equals("token")) {
+                if (isGet) {
+                    pr.add(param);
+                }
+                hasToken = true;
+            }
+        }
+
+        for (RetrofitParam param : params) {
+            if (!"token".equals(param.getTypeName())  && !"cursor".equals(param.getTypeName()) && !"limit".equals(param.getTypeName())) {
+                param.setNull(true);
+                pr.add(param);
+            }
+        }
+
+        for (RetrofitParam param : params) {
+            if ("cursor".equals(param.getTypeName()) || "limit".equals(param.getTypeName())) {
+                param.setNull(true);
+                pr.add(param);
+            }
+        }
+        if (isGet) {
+            boolean isFirst = true, isApiFirst = true;
+            StringBuilder paramsList = new StringBuilder();
+            for (RetrofitParam param : pr) {
+                if (!isFirst) {
+                    printString(ps, ",");
+                    printStringS(ps, "                                ");
+
+                }
+
+                if (!isApiFirst) {
+                    printString(psa, ",");
+                    printStringS(psa, "                                ");
+                }
+
+                printStringS(ps, "@Query(\"%s\") %s: %s%s",
+//                    param.getAnnoType(),
+                        param.getTypeName(), makeFieldName(param.getTypeName()), param.getReturnType(), param.isNull() ? "? = null": "");
+                if (!"token".equals(param.getTypeName())) {
+                    printStringS(psa, "%s: %s%s", makeFieldName(param.getTypeName()), param.getReturnType(), param.isNull() ? "? = null": "");
+                    if (!isApiFirst || hasToken) {
+                        paramsList.append(", ");
+                    }
+                    paramsList.append(makeFieldName(param.getTypeName()));
+                    isApiFirst = false;
+                }
+
+                isFirst = false;
+            }
+            printString(ps, "): Call<%s>", classname);
+            printString(ps, "");
+
+            printString(psa, "): SlackResponse<%s> {", classname);
+            printString(psa, "        return getResponse(service.%s(%s%s))", makeFieldName(title), hasToken ? "token": "", paramsList.toString());
+            printString(psa, "    }");
+        } else {
+            generateActionRequestClass(key, json, isGet, pr);
+
+            printString(psa, "        return getResponse(service.%s(authen(), request))", makeFieldName(title));
+            printString(psa, "    }");
+        }
+        printString(psa);
+    }
+
+    private void generateActionRequestClass(String key, JSONObject json, boolean isGet, ArrayList<RetrofitParam> params) throws IOException {
+        String classname = makeClassName(key.substring(1).replace(".", "_")) + "Request";
+        File outdir = new File(outputDirFile, packageName.replace(".", "/") + "/request");
+        outdir.mkdirs();
+        PrintStream ps = new PrintStream(new FileOutputStream(new File(outdir, classname + ".kt")));
+
+        printString(ps, "package com.anttek.slack.request");
         printString(ps, "");
-        printString(ps, "    ): Call<%s>", classname);
+        printStringS(ps, "%sclass %s (", params.size() > 0 ? "data " : "", classname);
+
+        boolean isFirst = true;
+        for (RetrofitParam param : params) {
+            printString(ps, isFirst ? "" : ",");
+            printStringS(ps, "        ");
+            printStringS(ps, "val %s: %s%s", param.getTypeName(), param.getReturnType(), param.isNull() ? "? = null": "");
+            isFirst = false;
+        }
+
         printString(ps, "");
+        printString(ps, ")");
+        ps.close();
     }
 
     private String getHttpMethod(boolean isGet) {
@@ -222,11 +341,16 @@ public class CodeGeneratorV2 {
 
     private void writeActionClassImport(PrintStream ps) {
         ps.println("import " + packageName + ".model.*");
+        ps.println("import com.anttek.slack.request.*");
         ps.println("import com.anttek.slack.response.*");
         ps.println("import retrofit2.Call");
+        ps.println("import retrofit2.http.Header");
         ps.println("import retrofit2.http.GET");
         ps.println("import retrofit2.http.POST");
         ps.println("import retrofit2.http.Query");
+        ps.println("import retrofit2.http.Body");
+        ps.println("import retrofit2.http.QueryMap");
+
         ps.println();
     }
 
@@ -420,7 +544,7 @@ public class CodeGeneratorV2 {
         writeClassPackage(ps, item);
         writeClassImport(ps, item);
         writeClassDescription(ps, item);
-        openClass(ps, classname);
+        openClass(ps, item, classname);
 
         ArrayList<String> required = new ArrayList<>();
         if (item.json.has("required")) {
@@ -546,12 +670,16 @@ public class CodeGeneratorV2 {
         ps.println(")");
     }
 
-    private void openClass(PrintStream ps, String classname) {
-        printStringS(ps, "class %s (", classname);
+    private void openClass(PrintStream ps, DefItem item, String classname) {
+        printStringS(ps, "%sclass %s (", item.isModel ? "" : "", classname);
     }
 
     private void printString(PrintStream ps, String string, String... args) {
         ps.println(String.format(string, args));
+    }
+
+    private void printString(PrintStream ps) {
+        ps.println();
     }
 
     private void printStringS(PrintStream ps, String string, String... args) {
