@@ -1,46 +1,15 @@
-group = 'com.anttek.slack'
-version = '1.0'
-
-// plugin build
-apply plugin: 'java'
-apply plugin: 'kotlin'
-
-// compilation version
-compileJava {
-    sourceCompatibility = java_version
-    targetCompatibility = java_version
-}
-
-compileTestJava {
-    sourceCompatibility = java_test_version
-    targetCompatibility = java_test_version
-}
-
-compileKotlin {
-    kotlinOptions {
-        jvmTarget = java_version
+publishing {
+    publications {
+        maven(MavenPublication) {
+            groupId = group
+            artifactId = "callback"
+            version = version
+            from components.java
+//            artifact sourceJar
+        }
     }
 }
-
-compileTestKotlin {
-    kotlinOptions {
-        jvmTarget = java_version
-    }
-}
-
-repositories {
-    jcenter()
-}
-
-
 dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8"
-    implementation "com.squareup.retrofit2:retrofit:$retrofit_version"
-    implementation "com.squareup.retrofit2:converter-gson:$retrofit_version"
-    implementation "com.squareup.retrofit2:converter-jackson:$retrofit_version"
-    implementation "com.squareup.okhttp3:logging-interceptor:$okhttp_version"
-
-    testImplementation "org.mockito:mockito-all:2.0.2-beta"
-    testImplementation "junit:junit:$junit_verison"
-
+    api project(':slack-api')
 }

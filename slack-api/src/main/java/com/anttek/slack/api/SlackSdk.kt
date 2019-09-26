@@ -6,7 +6,7 @@ import retrofit2.Retrofit.Builder
 /**
  * Created by duc-d on 8/24/2017.
  */
-class Slack(client: OkHttpClient, mapper: Mapper) {
+class SlackSdk(client: OkHttpClient, mapper: Mapper) {
     companion object {
         const val SLACK_API_ENDPOINT = "https://slack.com/api/"
     }
