@@ -1,46 +1,55 @@
 group = 'com.anttek.slack'
-version = '1.0'
+version = '0.1.0'
 
-// plugin build
 apply plugin: 'java'
 apply plugin: 'kotlin'
+//apply plugin: 'maven-publish'
+apply plugin: 'io.freefair.github.package-registry-maven-publish'
 
-// compilation version
-compileJava {
-    sourceCompatibility = java_version
-    targetCompatibility = java_version
+github {
+    slug
+    username = System.getenv('GITHUB_USERNAME')
+    token = System.getenv('GITHUB_TOKEN')
+    tag = 'HEAD'
+    travis = false
 }
 
-compileTestJava {
-    sourceCompatibility = java_test_version
-    targetCompatibility = java_test_version
+println(System.getenv('GITHUB_USERNAME'))
+println(System.getenv('GITHUB_TOKEN'))
+
+task sourceJar(type: Jar) {
+    classifier 'sources'
+    from sourceSets.main.allJava
 }
 
-compileKotlin {
-    kotlinOptions {
-        jvmTarget = java_version
+publishing {
+    publications {
+        maven(MavenPublication) {
+            groupId = group
+            artifactId = "api"
+            version = version
+            from components.java
+//            artifact sourceJar
+        }
     }
+//    repositories{
+//        maven {
+//            credentials {
+//                username System.getenv('GITHUB_USERNAME')
+//                password System.getenv('GITHUB_TOKEN')
+//            }
+//            url "https://maven.pkg.github.com/baole"
+//        }
+//    }
 }
-
-compileTestKotlin {
-    kotlinOptions {
-        jvmTarget = java_version
-    }
-}
-
-repositories {
-    jcenter()
-}
-
 
 dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8"
     implementation "com.squareup.retrofit2:retrofit:$retrofit_version"
     implementation "com.squareup.retrofit2:converter-gson:$retrofit_version"
     implementation "com.squareup.retrofit2:converter-jackson:$retrofit_version"
-    implementation "com.squareup.okhttp3:logging-interceptor:$okhttp_version"
 
+    testImplementation "com.squareup.okhttp3:logging-interceptor:$okhttp_version"
     testImplementation "org.mockito:mockito-all:2.0.2-beta"
     testImplementation "junit:junit:$junit_verison"
-
 }

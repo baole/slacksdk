@@ -4,7 +4,7 @@ import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import java.util.*
 
-object AliceUtil {
+object OkHttpUtil {
     fun okHttpClient(): OkHttpClient {
         val builder = OkHttpClient.Builder()
         val logging = HttpLoggingInterceptor()

@@ -1,7 +1,4 @@
 buildscript {
-    repositories {
-        jcenter()
-    }
 
     ext {
         spring_boot_version = '2.1.2.RELEASE'
@@ -36,15 +33,49 @@ buildscript {
         dbunit = "2.6.0"
     }
 
+    repositories {
+        jcenter()
+        maven { url "https://plugins.gradle.org/m2/" }
+    }
+
     dependencies {
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
         classpath "org.jetbrains.kotlin:kotlin-allopen:$kotlin_version"
         classpath "org.jetbrains.kotlin:kotlin-noarg:$kotlin_version"
+        classpath "io.freefair.gradle:github-plugin:4.1.1"
     }
 }
 
 configure(allprojects) {
-    // common dependencies for all projects
+    apply plugin: 'java'
+    apply plugin: 'kotlin'
+
+    compileJava {
+        sourceCompatibility = java_version
+        targetCompatibility = java_version
+    }
+
+    compileTestJava {
+        sourceCompatibility = java_test_version
+        targetCompatibility = java_test_version
+    }
+
+    compileKotlin {
+        kotlinOptions {
+            jvmTarget = java_version
+        }
+    }
+
+    compileTestKotlin {
+        kotlinOptions {
+            jvmTarget = java_version
+        }
+    }
+
+    repositories {
+        jcenter()
+    }
+
     dependencies {
     }
 }

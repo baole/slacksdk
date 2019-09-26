@@ -7,8 +7,8 @@ import com.anttek.slack.api.request.ChatPostMessageRequest
 object SlackTest {
     @JvmStatic
     fun main(args: Array<String>) {
-        val token = "xoxp-4878724429-4878724477-350528314386-f68d47ea6cd60fbed5cef8f12dbff576"
-        val api = Slack(AliceUtil.okHttpClient(), DefaultMapper()).api(token)
+        val token = System.getenv("SLACK_TEST_TOKEN")
+        val api = Slack(OkHttpUtil.okHttpClient(), DefaultMapper()).api(token)
 
 //        api.channels().result?.channels?.forEach {
 //            println(it)
