@@ -178,7 +178,7 @@ class SlackCallback {
                 val jsonProp: JSONObject? = jsonProperties.getJSONObject(key)
                 if (jsonProp!!.has("additionalProperties")) {
                     var childKey: String
-                    childKey = if (item.isModel) {
+                    childKey = if (item.isRequest) {
                         item.key + "_" + key
                     } else {
                         item.key.replace("Response", "") + "_" + key + "Response"
@@ -188,7 +188,7 @@ class SlackCallback {
                         generateClass(childItem)
                     }
                 }
-                writeClassProperty(ps, classname, key, jsonProp, required, isFirst, item.isModel)
+                writeClassProperty(ps, classname, key, jsonProp, required, isFirst, item.isRequest)
                 isFirst = false
             }
         }
@@ -253,7 +253,7 @@ class SlackCallback {
     }
 
     private fun openClass(ps: PrintStream?, item: DefItem?, classname: String?) {
-        printStringS(ps, "%sclass %s (", if (item!!.isModel) "" else "", classname)
+        printStringS(ps, "%sclass %s (", if (item!!.isRequest) "" else "", classname)
     }
 
     private fun printString(ps: PrintStream?, string: String?, vararg args: String?) {
@@ -279,7 +279,7 @@ class SlackCallback {
     }
 
     private fun writeClassImport(ps: PrintStream?, item: DefItem?) {
-        if (item!!.isModel) {
+        if (item!!.isRequest) {
         } else {
             printString(ps, "import %s.model.*", packageName)
         }

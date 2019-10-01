@@ -1,7 +1,7 @@
 package com.anttek.slack.api.response
 import com.anttek.slack.api.model.*
+import com.anttek.slack.api.BaseResponse
 
 class GroupsListResponse (
-    var groups: ArrayList<Group>,
-    var ok: Boolean
-)
+    var groups: ArrayList<Group>
+): BaseResponse()

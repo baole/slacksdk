@@ -1,8 +1,7 @@
 package com.anttek.slack.api.response
 import com.anttek.slack.api.model.*
+import com.anttek.slack.api.BaseResponse
 
 class UsersConversationsResponse (
-    var channels: ArrayList<Conversation>,
-    var responseMetadata: UsersConversationsResponseMetadataResponse? = null,
-    var ok: Boolean
-)
+    var channels: ArrayList<Conversation>
+): BaseResponse()

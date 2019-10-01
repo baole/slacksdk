@@ -1,4 +1,4 @@
-package com.anttek.slack.model
+package com.anttek.slack.api.model
 
 /**
  * Slack's Blockkit

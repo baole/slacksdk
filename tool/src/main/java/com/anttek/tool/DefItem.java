@@ -6,5 +6,5 @@ class DefItem {
     String key;
     JSONObject json;
     int kind;
-    boolean isModel = true;
+    boolean isRequest = true;
 }

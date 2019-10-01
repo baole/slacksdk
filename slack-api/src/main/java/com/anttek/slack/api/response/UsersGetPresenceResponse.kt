@@ -1,5 +1,6 @@
 package com.anttek.slack.api.response
 import com.anttek.slack.api.model.*
+import com.anttek.slack.api.BaseResponse
 
 class UsersGetPresenceResponse (
     var autoAway: Boolean? = null,
@@ -7,6 +8,5 @@ class UsersGetPresenceResponse (
     var lastActivity: Long? = null,
     var connectionCount: Long? = null,
     var online: Boolean? = null,
-    var ok: Boolean,
     var presence: String
-)
+): BaseResponse()

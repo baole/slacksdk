@@ -1,6 +1,6 @@
 package com.anttek.slack.callback
 
-import com.anttek.slack.model.OptionObject
+import com.anttek.slack.api.model.OptionObject
 
 data class CommandTeam(var id: String? = null, var domain: String? = null)
 

@@ -1,7 +1,7 @@
 package com.anttek.slack.api.response
 import com.anttek.slack.api.model.*
+import com.anttek.slack.api.BaseResponse
 
 class ChannelsCreateResponse (
-    var channel: Channel,
-    var ok: Boolean
-)
+    var channel: Channel
+): BaseResponse()

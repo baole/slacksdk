@@ -19,7 +19,7 @@ public class Type {
     }
 
     public String getFullType() {
-        if (_kind == CodeGeneratorV2.TYPE_OBJECT) {
+        if (_kind == SlackApi.TYPE_OBJECT) {
             return _type;
         } else {
             return String.format("ArrayList<%s>", makeClassName(_type));
@@ -36,7 +36,7 @@ public class Type {
                 _index = name.indexOf("_");
             }
 
-            if (CodeGeneratorV2.isNumeric(name)) {
+            if (SlackApi.Companion.isNumeric(name)) {
                 name = "_" + name;
             }
 

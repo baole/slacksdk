@@ -1,19 +1,18 @@
 package com.anttek.slack
 
-import com.anttek.slack.request.ChatPostMessageRequest
+import com.anttek.slack.api.DefaultMapper
+import com.anttek.slack.api.SlackSdk
+import com.anttek.slack.api.request.ChatPostMessageRequest
+
 
 object SlackTest {
     @JvmStatic
     fun main(args: Array<String>) {
-        val token = "xoxp-4878724429-4878724477-350528314386-f68d47ea6cd60fbed5cef8f12dbff576"
-        val api = Slack(AliceUtil.okHttpClient(), DefaultMapper()).api(token)
-
-//        api.channels().result?.channels?.forEach {
-//            println(it)
-//        }
+        val token = "valid token"
+        val api = SlackSdk(AliceUtil.okHttpClient(), DefaultMapper()).api(token)
 
         val chatPostMessageRequest = ChatPostMessageRequest(text = "Hellooo", channel = "C04RUMAGP")
-        api.chatPost(chatPostMessageRequest).result?.let {
+        api.chatPostMessage(chatPostMessageRequest).result?.let {
             println(it)
         }
     }

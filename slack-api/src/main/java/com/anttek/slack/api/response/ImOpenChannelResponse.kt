@@ -1,5 +1,6 @@
 package com.anttek.slack.api.response
 import com.anttek.slack.api.model.*
+import com.anttek.slack.api.BaseResponse
 
 class ImOpenChannelResponse (
     var lastRead: String? = null,
@@ -11,4 +12,4 @@ class ImOpenChannelResponse (
     var unreadCountDisplay: Double? = null,
     var user: String? = null,
     var latest: Message? = null
-)
+): BaseResponse()

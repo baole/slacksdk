@@ -1,8 +1,7 @@
 package com.anttek.slack.api.response
 import com.anttek.slack.api.model.*
+import com.anttek.slack.api.BaseResponse
 
 class ChatDeleteResponse (
-    var channel: String,
-    var ok: Boolean,
-    var ts: String
-)
+    var channel: String
+): BaseResponse()

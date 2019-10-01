@@ -1,8 +1,7 @@
 package com.anttek.slack.api.response
 import com.anttek.slack.api.model.*
+import com.anttek.slack.api.BaseResponse
 
 class ChatMeMessageResponse (
-    var channel: String? = null,
-    var ok: Boolean,
-    var ts: String? = null
-)
+    var channel: String? = null
+): BaseResponse()
