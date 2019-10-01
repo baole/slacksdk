@@ -1,8 +1,3 @@
-/*
- * Copyright (c) 2016, 2017, 2018, 2019. Tandem. All rights reserved.
- *
- */
-
 package com.anttek.tool
 
 import org.apache.commons.io.FileUtils
@@ -14,7 +9,7 @@ import java.nio.file.Paths
 import java.util.*
 
 /**
- *
+ * one-time code generator
  */
 class SlackCallback {
     private var jsonSchemaFile: String? = null

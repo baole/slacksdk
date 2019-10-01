@@ -1,10 +1,10 @@
-package com.anttek.tool;
+package com.anttek.tool
 
-import org.json.JSONObject;
+import org.json.JSONObject
 
-class DefItem {
-    String key;
-    JSONObject json;
-    int kind;
-    boolean isRequest = true;
+internal class DefItem {
+    var key: String? = null
+    var json: JSONObject? = null
+    var kind = 0
+    var isRequest = true
 }

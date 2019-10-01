@@ -1,56 +1,36 @@
-package com.anttek.tool;
+package com.anttek.tool
 
-public class Type {
-    public String _type;
-    public int _kind;
-    public int targetKind;
-    public boolean isPrimative = false;
+import com.anttek.tool.SlackApi.Companion.isNumeric
 
-    public String in;
-    public String name;
+class Type internal constructor(var type: String, var kind: Int) {
+    var targetKind = 0
+    var isPrimative = false
+    var `in`: String? = null
+    var name: String? = null
 
-    Type(String type, int kind) {
-        this._type = type;
-        this._kind = kind;
-    }
-
-    public String getType() {
-        return _type;
-    }
-
-    public String getFullType() {
-        if (_kind == SlackApi.TYPE_OBJECT) {
-            return _type;
+    val fullType: String
+        get() = if (kind == SlackApi.TYPE_OBJECT) {
+            type
         } else {
-            return String.format("ArrayList<%s>", makeClassName(_type));
+            String.format("ArrayList<%s>", makeClassName(type))
         }
-    }
 
-    public String makeClassName(String action) {
-        try {
-            String name = action.substring(0, 1).toUpperCase() + action.substring(1, action.length());
-
-            int _index = name.indexOf("_");
+    fun makeClassName(action: String): String {
+        return try {
+            var name = action.substring(0, 1).toUpperCase() + action.substring(1, action.length)
+            var _index = name.indexOf("_")
             while (_index >= 0) {
-                name = name.substring(0, _index) + name.substring(_index + 1, _index + 2).toUpperCase() + name.substring(_index + 2, name.length());
-                _index = name.indexOf("_");
+                name = name.substring(0, _index) + name.substring(_index + 1, _index + 2).toUpperCase() + name.substring(_index + 2, name.length)
+                _index = name.indexOf("_")
             }
-
-            if (SlackApi.Companion.isNumeric(name)) {
-                name = "_" + name;
+            if (isNumeric(name)) {
+                name = "_$name"
             }
-
-            return name;
-        } catch (Throwable e) {
-            System.err.println("Error: Cannot formalize classname for " + action);
-            return action;
+            name
+        } catch (e: Throwable) {
+            System.err.println("Error: Cannot formalize classname for $action")
+            action
         }
     }
-
-
-    public int getKind() {
-        return _kind;
-    }
-
 
 }

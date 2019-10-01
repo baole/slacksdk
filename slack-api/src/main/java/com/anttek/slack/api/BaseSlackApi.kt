@@ -18,7 +18,7 @@ abstract class BaseSlackApi {
                 }
             }
         } catch (e: IOException) {
-            return SlackResponse<T>(throwable = e)
+            return SlackResponse<T>(exception = e)
         }
     }
 }
