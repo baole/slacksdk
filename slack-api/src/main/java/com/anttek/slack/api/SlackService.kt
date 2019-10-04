@@ -1,5 +1,4 @@
 package com.anttek.slack.api
-import com.anttek.slack.api.model.*
 import com.anttek.slack.api.request.*
 import com.anttek.slack.api.response.*
 import retrofit2.Call
@@ -8,7 +7,6 @@ import retrofit2.http.GET
 import retrofit2.http.POST
 import retrofit2.http.Query
 import retrofit2.http.Body
-import retrofit2.http.QueryMap
 
 interface SlackService {
     @POST("groups.open")
@@ -51,7 +49,7 @@ interface SlackService {
                                 @Query("redirect_uri") redirectUri: String? = null,
                                 @Query("client_id") clientId: String? = null,
                                 @Query("client_secret") clientSecret: String? = null,
-                                @Query("single_channel") singleChannel: Boolean? = null): Call<GenericResponse>
+                                @Query("single_channel") singleChannel: Boolean? = null): Call<OauthAccessResponse>
 
     @GET("bots.info")
     fun botsInfo(@Query("token") token: String? = null,

@@ -60,7 +60,7 @@ class SlackSdk(private val service: SlackService, private val mapper: Mapper, pr
                                 redirectUri: String? = null,
                                 clientId: String? = null,
                                 clientSecret: String? = null,
-                                singleChannel: Boolean? = null): SlackResponse<GenericResponse> {
+                                singleChannel: Boolean? = null): SlackResponse<OauthAccessResponse> {
         return getResponse(service.oauthAccess(code, redirectUri, clientId, clientSecret, singleChannel))
     }
 
