@@ -1,8 +1,11 @@
 package com.anttek.slack.api.request
 
-data class PinsAddRequest (
+import com.anttek.slack.api.GenericRequest
+
+class PinsAddRequest (
+         token: String? = null,
         val file_comment: String? = null,
         val timestamp: Double? = null,
         val file: String? = null,
         val channel: String? = null
-)
+) : GenericRequest(token)

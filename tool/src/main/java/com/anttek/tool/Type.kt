@@ -5,8 +5,8 @@ import com.anttek.tool.SlackApi.Companion.isNumeric
 class Type internal constructor(var type: String, var kind: Int) {
     var targetKind = 0
     var isPrimative = false
-    var `in`: String? = null
-    var name: String? = null
+    var `in`: String = ""
+    var name: String = ""
 
     val fullType: String
         get() = if (kind == SlackApi.TYPE_OBJECT) {

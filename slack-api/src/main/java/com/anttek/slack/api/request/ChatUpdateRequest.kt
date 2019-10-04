@@ -1,6 +1,9 @@
 package com.anttek.slack.api.request
 
-data class ChatUpdateRequest (
+import com.anttek.slack.api.GenericRequest
+
+class ChatUpdateRequest (
+         token: String? = null,
         val blocks: String? = null,
         val attachments: String? = null,
         val text: String? = null,
@@ -9,4 +12,4 @@ data class ChatUpdateRequest (
         val as_user: Boolean? = null,
         val link_names: Boolean? = null,
         val channel: String? = null
-)
+) : GenericRequest(token)

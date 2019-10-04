@@ -60,18 +60,23 @@ class SlackApi {
         writeActionClassPackage(ps)
         writeActionClassImport(ps)
         printString(ps, "interface SlackService {")
-        val psa = PrintStream(FileOutputStream(File(outdir, "SlackApi.kt")))
+        val psa = PrintStream(FileOutputStream(File(outdir, "SlackSdk.kt")))
         writeActionClassPackage(psa)
         printString(psa, "import %s.request.*", packageName)
         printString(psa, "import %s.response.*", packageName)
         printString(psa)
-        printString(psa, "class SlackApi(private val service: SlackService, private val mapper: Mapper, private var token: String = \"\") : BaseSlackApi() {")
-        printString(psa, "    fun token(token: String): SlackApi {")
+        printString(psa, "class SlackSdk(private val service: SlackService, private val mapper: Mapper, private var token: String = \"\") : BaseSlackSdk() {")
+        printString(psa, "    fun token(token: String): SlackSdk {")
         printString(psa, "         this.token = token")
         printString(psa, "        return this")
         printString(psa, "    }")
         printString(psa)
-        printString(psa, "    private fun authen() = \"Bearer \$token\"")
+        printString(psa, "    fun resolveGetToken(token: String?) = token ?: this.token")
+        printString(psa)
+        printString(psa, "    fun resolvePostToken(request: GenericRequest) = \"Bearer \${request.token ?: token}\"")
+
+
+
         printString(psa)
         for (key in jsonPaths!!.keySet()) {
             generateMethod(ps, psa, key, jsonPaths.getJSONObject(key))
@@ -92,21 +97,13 @@ class SlackApi {
 
     @Throws(IOException::class)
     private fun generateMethod(ps: PrintStream, psa: PrintStream, key: String, json: JSONObject, isGet: Boolean) {
-        val title: String = json!!.getString("operationId")
-        val classname = makeClassName(title + "Response")
+        val title: String = json.getString("operationId")
+
+        val classname_ = makeClassName(title + "Response")
+        val classname = if (classNameList.contains(classname_)) classname_ else "GenericResponse"
         val jsonParams: JSONArray = json.getJSONArray("parameters")
-        printString(ps, "    @%s(\"%s\")", getHttpMethod(isGet), key.substring(1))
-        printStringS(ps, "    fun %s(", makeFieldName(title))
-        val name = makeClassName(key.substring(1).replace(".", "_")) + "Request"
-        printStringS(psa, "    fun %s(", makeFieldName(title))
-        if (isGet) {
-//            printStringS(ps, "@QueryMap request: %s", name);
-        } else {
-            printStringS(ps, "@Header(\"Authorization\") authorization: String, @Body request: %s", name)
-            printString(ps, "): Call<%s>", classname)
-            printString(ps, "")
-            printString(psa, "request: %s): SlackResponse<%s> {", makeClassName(title) + "Request", makeClassName(title) + "Response")
-        }
+
+        //params
         val paramCount = jsonParams.length()
         val params = ArrayList<RetrofitParam?>()
         for (i in 0 until paramCount) {
@@ -119,13 +116,28 @@ class SlackApi {
                 System.err.println("Warning: resolveType: retrofit param " + type.`in`)
             }
         }
+
+
+        printString(ps, "    @%s(\"%s\")", getHttpMethod(isGet), key.substring(1))
+        printStringS(ps, "    fun %s(", makeFieldName(title))
+        printStringS(psa, "    fun %s(", makeFieldName(title))
+        if (isGet) {
+//            printStringS(ps, "@QueryMap request: %s", name);
+        } else {
+            val name = makeClassName(key.substring(1).replace(".", "_")) + "Request"
+            printStringS(ps, "@Header(\"Authorization\") authorization: String, @Body request: %s", name)
+            printString(ps, "): Call<%s>", classname)
+            printString(ps, "")
+            printString(psa, "request: %s): SlackResponse<%s> {", makeClassName(title) + "Request", classname)
+        }
+
+
         var hasToken = false
-        val pr = ArrayList<RetrofitParam?>()
+        val pr = ArrayList<RetrofitParam>()
         for (param in params) {
             if (param!!.annoType == "Header" || param.typeName == "token") {
-                if (isGet) {
-                    pr.add(param)
-                }
+                param.isNull = true
+                pr.add(param)
                 hasToken = true
             }
         }
@@ -141,27 +153,30 @@ class SlackApi {
                 pr.add(param)
             }
         }
+
         if (isGet) {
             var isFirst = true
             var isApiFirst = true
             val paramsList = StringBuilder()
+
             for (param in pr) {
                 if (!isFirst) {
                     printString(ps, ",")
                     printStringS(ps, "                                ")
+
                 }
-                if (!isApiFirst) {
+                if (!isFirst) {
                     printString(psa, ",")
                     printStringS(psa, "                                ")
                 }
-                printStringS(ps, "@Query(\"%s\") %s: %s%s",
-//                    param.getAnnoType(),
-                        param!!.typeName, makeFieldName(param.typeName), param.returnType, if (param.isNull) "? = null" else "")
+                printStringS(ps, "@Query(\"%s\") %s: %s%s", param!!.typeName, makeFieldName(param.typeName), param.returnType, if (param.isNull) "? = null" else "")
+                printStringS(psa, "%s: %s%s", makeFieldName(param.typeName), param.returnType, if (param.isNull) "? = null" else "")
+
+                if (!isApiFirst) {
+                    paramsList.append(", ")
+                }
+
                 if ("token" != param.typeName) {
-                    printStringS(psa, "%s: %s%s", makeFieldName(param.typeName), param.returnType, if (param.isNull) "? = null" else "")
-                    if (!isApiFirst || hasToken) {
-                        paramsList.append(", ")
-                    }
                     paramsList.append(makeFieldName(param.typeName))
                     isApiFirst = false
                 }
@@ -170,43 +185,42 @@ class SlackApi {
             printString(ps, "): Call<%s>", classname)
             printString(ps, "")
             printString(psa, "): SlackResponse<%s> {", classname)
-            printString(psa, "        return getResponse(service.%s(%s%s))", makeFieldName(title), if (hasToken) "token" else "", paramsList.toString())
+            printString(psa, "        return getResponse(service.%s(%s%s%s))", makeFieldName(title), if (hasToken) "resolveGetToken(token)" else "",
+                    if (paramsList.isNotEmpty() && hasToken) ", " else "", paramsList.toString())
             printString(psa, "    }")
         } else {
-            generateActionRequestClass(key, json, isGet, pr)
-            printString(psa, "        return getResponse(service.%s(authen(), request))", makeFieldName(title))
+            generateActionRequestClass(key, json, isGet, pr, hasToken)
+            printString(psa, "        return getResponse(service.%s(resolvePostToken(request), request))", makeFieldName(title))
             printString(psa, "    }")
         }
         printString(psa)
     }
 
     @Throws(IOException::class)
-    private fun generateActionRequestClass(key: String?, json: JSONObject?, isGet: Boolean, params: ArrayList<RetrofitParam?>?) {
+    private fun generateActionRequestClass(key: String?, json: JSONObject?, isGet: Boolean, params: ArrayList<RetrofitParam>, hasToken: Boolean) {
         val classname = makeClassName(key!!.substring(1).replace(".", "_")) + "Request"
-        val outdir = File(outputDirFile, packageName!!.replace(".", "/") + "/request")
+        val outdir = File(outputDirFile, packageName.replace(".", "/") + "/request")
         outdir.mkdirs()
         val ps = PrintStream(FileOutputStream(File(outdir, "$classname.kt")))
         printString(ps, "package %s.request", packageName)
         printString(ps, "")
-        printStringS(ps, "%sclass %s (", if (params!!.size > 0) "data " else "", classname)
+        printString(ps, "import com.anttek.slack.api.GenericRequest")
+        printString(ps, "")
+        printStringS(ps, "class %s (", classname)
         var isFirst = true
         for (param in params) {
             printString(ps, if (isFirst) "" else ",")
             printStringS(ps, "        ")
-            printStringS(ps, "val %s: %s%s", param!!.typeName, param.returnType, if (param.isNull) "? = null" else "")
+            printStringS(ps, "%s %s: %s%s", if (param.typeName == "token") "" else "val", param.typeName, param.returnType, if (param.isNull) "? = null" else "")
             isFirst = false
         }
         printString(ps, "")
-        printString(ps, ")")
+        printString(ps, ") : GenericRequest(%s)", if (hasToken) "token" else "null")
         ps.close()
     }
 
     private fun getHttpMethod(isGet: Boolean): String? {
         return if (isGet) "GET" else "POST"
-    }
-
-    private fun getMethodPrefix(isGet: Boolean): String? {
-        return if (isGet) "get" else "post"
     }
 
     private fun writeActionClassPackage(ps: PrintStream?) {
@@ -300,7 +314,9 @@ class SlackApi {
     }
 
     ///------------- definitions ------------
-    internal var defTypeMap: MutableMap<String?, String?>? = HashMap()
+    internal var defTypeMap = mutableMapOf<String, String>()
+    internal var defClassNameMap = mutableMapOf<String, String>()
+    internal var classNameList = mutableListOf<String>()
 
     @Throws(IOException::class)
     private fun generateDefinitions(jsonObject: JSONObject?) {
@@ -454,11 +470,46 @@ class SlackApi {
         ps.println("}")
     }
 
+    val baseResponseProps = mutableListOf("ok", "error", "warning", "ts", "response_metadata")
+
     @Throws(IOException::class)
     private fun generateClass(item: DefItem) {
         println("Generate class: " + item.key)
+        if (!item.isRequest && item.json.has("properties")) {
+            var hasProp = false
+            val jsonProperties = item.json.getJSONObject("properties")
+            var isFirst = true
+            for (key in jsonProperties!!.keySet()) {
+                val jsonProp: JSONObject? = jsonProperties.getJSONObject(key)
+                if (jsonProp!!.has("additionalProperties")) {
+                    var childKey: String
+                    childKey = if (item.isRequest) {
+                        item.key + "_" + key
+                    } else {
+                        item.key.replace("Response", "") + "_" + key + "Response"
+                    }
+                    val childItem = addToMissingDefinition(childKey, jsonProp, item.isRequest)
+                    if (childItem != null) {
+                        generateClass(childItem)
+                    }
+                }
+                if (!baseResponseProps.contains(key)) {
+                    hasProp = true
+                }
+            }
+
+            if (!hasProp) {
+                defClassNameMap[item.key] = "GenericResponse"
+                return
+            } else {
+//                defClassNameMap[item.key] = item
+            }
+        }
+
+
         prepareDefinition(item)
-        val classname = makeClassName(item.key)
+        val classname = makeClassName(item.key!!)
+        classNameList.add(classname)
         val ps = PrintStream(FileOutputStream(File(outputDirFile, "$classname.kt")))
         writeClassPackage(ps, item)
         writeClassImport(ps, item)
@@ -473,7 +524,6 @@ class SlackApi {
             }
         }
 
-        val baseResponseProps = mutableListOf("ok", "error", "warning", "ts", "response_metadata")
         if (item.json.has("properties")) {
             val jsonProperties: JSONObject? = item.json.getJSONObject("properties")
             var isFirst = true
@@ -572,7 +622,7 @@ class SlackApi {
 
     private fun closeClass(ps: PrintStream, item: DefItem) {
         printString(ps)
-        printString(ps, ")%s", if (item.isRequest) "" else ": BaseResponse()")
+        printString(ps, ")%s", if (item.isRequest) "" else ": GenericResponse()")
     }
 
     private fun openClass(ps: PrintStream?, item: DefItem, classname: String?) {
@@ -604,7 +654,7 @@ class SlackApi {
     private fun writeClassImport(ps: PrintStream, item: DefItem) {
         if (!item.isRequest) {
             printString(ps, "import %s.model.*", packageName)
-            printString(ps, "import com.anttek.slack.api.BaseResponse")
+            printString(ps, "import com.anttek.slack.api.GenericResponse")
         }
         ps!!.println()
     }

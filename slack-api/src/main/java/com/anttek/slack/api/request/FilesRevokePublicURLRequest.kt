@@ -1,5 +1,8 @@
 package com.anttek.slack.api.request
 
-data class FilesRevokePublicURLRequest (
+import com.anttek.slack.api.GenericRequest
+
+class FilesRevokePublicURLRequest (
+         token: String? = null,
         val file: String? = null
-)
+) : GenericRequest(token)

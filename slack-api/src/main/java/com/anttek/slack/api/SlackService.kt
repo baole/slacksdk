@@ -12,16 +12,16 @@ import retrofit2.http.QueryMap
 
 interface SlackService {
     @POST("groups.open")
-    fun groupsOpen(@Header("Authorization") authorization: String, @Body request: GroupsOpenRequest): Call<GroupsOpenResponse>
+    fun groupsOpen(@Header("Authorization") authorization: String, @Body request: GroupsOpenRequest): Call<GenericResponse>
 
     @GET("apps.permissions.info")
-    fun appsPermissionsInfo(@Query("token") token: String): Call<AppsPermissionsInfoResponse>
+    fun appsPermissionsInfo(@Query("token") token: String? = null): Call<AppsPermissionsInfoResponse>
 
     @POST("groups.kick")
-    fun groupsKick(@Header("Authorization") authorization: String, @Body request: GroupsKickRequest): Call<GroupsKickResponse>
+    fun groupsKick(@Header("Authorization") authorization: String, @Body request: GroupsKickRequest): Call<GenericResponse>
 
     @GET("chat.scheduledMessages.list")
-    fun chatScheduledMessagesList(@Query("token") token: String,
+    fun chatScheduledMessagesList(@Query("token") token: String? = null,
                                 @Query("oldest") oldest: Double? = null,
                                 @Query("channel") channel: String? = null,
                                 @Query("latest") latest: Double? = null,
@@ -29,7 +29,7 @@ interface SlackService {
                                 @Query("limit") limit: Long? = null): Call<ChatScheduledMessagesListResponse>
 
     @GET("pins.list")
-    fun pinsList(@Query("token") token: String,
+    fun pinsList(@Query("token") token: String? = null,
                                 @Query("channel") channel: String? = null): Call<PinsListResponse>
 
     @POST("channels.invite")
@@ -39,7 +39,7 @@ interface SlackService {
     fun conversationsSetTopic(@Header("Authorization") authorization: String, @Body request: ConversationsSetTopicRequest): Call<ConversationsSetTopicResponse>
 
     @GET("channels.replies")
-    fun channelsReplies(@Query("token") token: String,
+    fun channelsReplies(@Query("token") token: String? = null,
                                 @Query("thread_ts") threadTs: Double? = null,
                                 @Query("channel") channel: String? = null): Call<ChannelsRepliesResponse>
 
@@ -51,26 +51,26 @@ interface SlackService {
                                 @Query("redirect_uri") redirectUri: String? = null,
                                 @Query("client_id") clientId: String? = null,
                                 @Query("client_secret") clientSecret: String? = null,
-                                @Query("single_channel") singleChannel: Boolean? = null): Call<OauthAccessResponse>
+                                @Query("single_channel") singleChannel: Boolean? = null): Call<GenericResponse>
 
     @GET("bots.info")
-    fun botsInfo(@Query("token") token: String,
+    fun botsInfo(@Query("token") token: String? = null,
                                 @Query("bot") bot: String? = null): Call<BotsInfoResponse>
 
     @GET("team.info")
-    fun teamInfo(@Query("token") token: String,
+    fun teamInfo(@Query("token") token: String? = null,
                                 @Query("team") team: String? = null): Call<TeamInfoResponse>
 
     @POST("conversations.close")
     fun conversationsClose(@Header("Authorization") authorization: String, @Body request: ConversationsCloseRequest): Call<ConversationsCloseResponse>
 
     @GET("groups.replies")
-    fun groupsReplies(@Query("token") token: String,
+    fun groupsReplies(@Query("token") token: String? = null,
                                 @Query("thread_ts") threadTs: Double? = null,
                                 @Query("channel") channel: String? = null): Call<GroupsRepliesResponse>
 
     @GET("channels.info")
-    fun channelsInfo(@Query("token") token: String,
+    fun channelsInfo(@Query("token") token: String? = null,
                                 @Query("include_locale") includeLocale: Boolean? = null,
                                 @Query("channel") channel: String? = null): Call<ChannelsInfoResponse>
 
@@ -78,10 +78,10 @@ interface SlackService {
     fun conversationsRename(@Header("Authorization") authorization: String, @Body request: ConversationsRenameRequest): Call<ConversationsRenameResponse>
 
     @POST("groups.unarchive")
-    fun groupsUnarchive(@Header("Authorization") authorization: String, @Body request: GroupsUnarchiveRequest): Call<GroupsUnarchiveResponse>
+    fun groupsUnarchive(@Header("Authorization") authorization: String, @Body request: GroupsUnarchiveRequest): Call<GenericResponse>
 
     @GET("files.info")
-    fun filesInfo(@Query("token") token: String,
+    fun filesInfo(@Query("token") token: String? = null,
                                 @Query("count") count: String? = null,
                                 @Query("file") file: String? = null,
                                 @Query("page") page: String? = null,
@@ -89,10 +89,10 @@ interface SlackService {
                                 @Query("limit") limit: Long? = null): Call<FilesInfoResponse>
 
     @POST("conversations.archive")
-    fun conversationsArchive(@Header("Authorization") authorization: String, @Body request: ConversationsArchiveRequest): Call<ConversationsArchiveResponse>
+    fun conversationsArchive(@Header("Authorization") authorization: String, @Body request: ConversationsArchiveRequest): Call<GenericResponse>
 
     @GET("team.integrationLogs")
-    fun teamIntegrationLogs(@Query("token") token: String,
+    fun teamIntegrationLogs(@Query("token") token: String? = null,
                                 @Query("count") count: String? = null,
                                 @Query("change_type") changeType: String? = null,
                                 @Query("app_id") appId: Long? = null,
@@ -110,34 +110,34 @@ interface SlackService {
     fun groupsCreateChild(@Header("Authorization") authorization: String, @Body request: GroupsCreateChildRequest): Call<GroupsCreateChildResponse>
 
     @GET("channels.list")
-    fun channelsList(@Query("token") token: String,
+    fun channelsList(@Query("token") token: String? = null,
                                 @Query("exclude_members") excludeMembers: Boolean? = null,
                                 @Query("exclude_archived") excludeArchived: Boolean? = null,
                                 @Query("cursor") cursor: String? = null,
                                 @Query("limit") limit: Long? = null): Call<ChannelsListResponse>
 
     @GET("conversations.members")
-    fun conversationsMembers(@Query("token") token: String,
+    fun conversationsMembers(@Query("token") token: String? = null,
                                 @Query("channel") channel: String? = null,
                                 @Query("cursor") cursor: String? = null,
                                 @Query("limit") limit: Long? = null): Call<ConversationsMembersResponse>
 
     @POST("stars.add")
-    fun starsAdd(@Header("Authorization") authorization: String, @Body request: StarsAddRequest): Call<StarsAddResponse>
+    fun starsAdd(@Header("Authorization") authorization: String, @Body request: StarsAddRequest): Call<GenericResponse>
 
     @POST("chat.scheduleMessage")
     fun chatScheduleMessage(@Header("Authorization") authorization: String, @Body request: ChatScheduleMessageRequest): Call<ChatScheduleMessageResponse>
 
     @POST("chat.unfurl")
-    fun chatUnfurl(@Header("Authorization") authorization: String, @Body request: ChatUnfurlRequest): Call<ChatUnfurlResponse>
+    fun chatUnfurl(@Header("Authorization") authorization: String, @Body request: ChatUnfurlRequest): Call<GenericResponse>
 
     @GET("apps.permissions.request")
-    fun appsPermissionsRequest(@Query("token") token: String,
+    fun appsPermissionsRequest(@Query("token") token: String? = null,
                                 @Query("scopes") scopes: String? = null,
-                                @Query("trigger_id") triggerId: String? = null): Call<AppsPermissionsRequestResponse>
+                                @Query("trigger_id") triggerId: String? = null): Call<GenericResponse>
 
     @GET("files.list")
-    fun filesList(@Query("token") token: String,
+    fun filesList(@Query("token") token: String? = null,
                                 @Query("count") count: String? = null,
                                 @Query("channel") channel: String? = null,
                                 @Query("ts_to") tsTo: Double? = null,
@@ -147,19 +147,19 @@ interface SlackService {
                                 @Query("types") types: String? = null): Call<FilesListResponse>
 
     @POST("files.delete")
-    fun filesDelete(@Header("Authorization") authorization: String, @Body request: FilesDeleteRequest): Call<FilesDeleteResponse>
+    fun filesDelete(@Header("Authorization") authorization: String, @Body request: FilesDeleteRequest): Call<GenericResponse>
 
     @POST("chat.deleteScheduledMessage")
-    fun chatDeleteScheduledMessage(@Header("Authorization") authorization: String, @Body request: ChatDeleteScheduledMessageRequest): Call<ChatDeleteScheduledMessageResponse>
+    fun chatDeleteScheduledMessage(@Header("Authorization") authorization: String, @Body request: ChatDeleteScheduledMessageRequest): Call<GenericResponse>
 
     @POST("chat.postMessage")
     fun chatPostMessage(@Header("Authorization") authorization: String, @Body request: ChatPostMessageRequest): Call<ChatPostMessageResponse>
 
     @POST("channels.mark")
-    fun channelsMark(@Header("Authorization") authorization: String, @Body request: ChannelsMarkRequest): Call<ChannelsMarkResponse>
+    fun channelsMark(@Header("Authorization") authorization: String, @Body request: ChannelsMarkRequest): Call<GenericResponse>
 
     @GET("users.conversations")
-    fun usersConversations(@Query("token") token: String,
+    fun usersConversations(@Query("token") token: String? = null,
                                 @Query("user") user: String? = null,
                                 @Query("exclude_archived") excludeArchived: Boolean? = null,
                                 @Query("types") types: String? = null,
@@ -167,7 +167,7 @@ interface SlackService {
                                 @Query("limit") limit: Long? = null): Call<UsersConversationsResponse>
 
     @POST("users.deletePhoto")
-    fun usersDeletePhoto(@Header("Authorization") authorization: String, @Body request: UsersDeletePhotoRequest): Call<UsersDeletePhotoResponse>
+    fun usersDeletePhoto(@Header("Authorization") authorization: String, @Body request: UsersDeletePhotoRequest): Call<GenericResponse>
 
     @POST("users.setPhoto")
     fun usersSetPhoto(@Header("Authorization") authorization: String, @Body request: UsersSetPhotoRequest): Call<UsersSetPhotoResponse>
@@ -176,30 +176,30 @@ interface SlackService {
     fun imOpen(@Header("Authorization") authorization: String, @Body request: ImOpenRequest): Call<ImOpenResponse>
 
     @POST("mpim.mark")
-    fun mpimMark(@Header("Authorization") authorization: String, @Body request: MpimMarkRequest): Call<MpimMarkResponse>
+    fun mpimMark(@Header("Authorization") authorization: String, @Body request: MpimMarkRequest): Call<GenericResponse>
 
     @POST("channels.unarchive")
-    fun channelsUnarchive(@Header("Authorization") authorization: String, @Body request: ChannelsUnarchiveRequest): Call<ChannelsUnarchiveResponse>
+    fun channelsUnarchive(@Header("Authorization") authorization: String, @Body request: ChannelsUnarchiveRequest): Call<GenericResponse>
 
     @GET("apps.permissions.users.request")
-    fun appsPermissionsUsersRequest(@Query("token") token: String,
+    fun appsPermissionsUsersRequest(@Query("token") token: String? = null,
                                 @Query("scopes") scopes: String? = null,
                                 @Query("user") user: String? = null,
-                                @Query("trigger_id") triggerId: String? = null): Call<AppsPermissionsUsersRequestResponse>
+                                @Query("trigger_id") triggerId: String? = null): Call<GenericResponse>
 
     @GET("emoji.list")
-    fun emojiList(@Query("token") token: String): Call<EmojiListResponse>
+    fun emojiList(@Query("token") token: String? = null): Call<GenericResponse>
 
     @POST("usergroups.disable")
     fun usergroupsDisable(@Header("Authorization") authorization: String, @Body request: UsergroupsDisableRequest): Call<UsergroupsDisableResponse>
 
     @GET("apps.uninstall")
-    fun appsUninstall(@Query("token") token: String,
+    fun appsUninstall(@Query("token") token: String? = null,
                                 @Query("client_secret") clientSecret: String? = null,
-                                @Query("client_id") clientId: String? = null): Call<AppsUninstallResponse>
+                                @Query("client_id") clientId: String? = null): Call<GenericResponse>
 
     @GET("team.accessLogs")
-    fun teamAccessLogs(@Query("token") token: String,
+    fun teamAccessLogs(@Query("token") token: String? = null,
                                 @Query("count") count: String? = null,
                                 @Query("page") page: String? = null,
                                 @Query("before") before: Long? = null): Call<TeamAccessLogsResponse>
@@ -214,37 +214,37 @@ interface SlackService {
     fun channelsSetPurpose(@Header("Authorization") authorization: String, @Body request: ChannelsSetPurposeRequest): Call<ChannelsSetPurposeResponse>
 
     @GET("im.replies")
-    fun imReplies(@Query("token") token: String,
+    fun imReplies(@Query("token") token: String? = null,
                                 @Query("thread_ts") threadTs: Double? = null,
                                 @Query("channel") channel: String? = null): Call<ImRepliesResponse>
 
     @GET("search.messages")
-    fun searchMessages(@Query("token") token: String,
+    fun searchMessages(@Query("token") token: String? = null,
                                 @Query("sort_dir") sortDir: String? = null,
                                 @Query("query") query: String? = null,
                                 @Query("sort") sort: String? = null,
                                 @Query("count") count: String? = null,
                                 @Query("highlight") highlight: Boolean? = null,
-                                @Query("page") page: String? = null): Call<SearchMessagesResponse>
+                                @Query("page") page: String? = null): Call<GenericResponse>
 
     @POST("files.comments.delete")
-    fun filesCommentsDelete(@Header("Authorization") authorization: String, @Body request: FilesCommentsDeleteRequest): Call<FilesCommentsDeleteResponse>
+    fun filesCommentsDelete(@Header("Authorization") authorization: String, @Body request: FilesCommentsDeleteRequest): Call<GenericResponse>
 
     @GET("groups.info")
-    fun groupsInfo(@Query("token") token: String,
+    fun groupsInfo(@Query("token") token: String? = null,
                                 @Query("include_locale") includeLocale: Boolean? = null,
                                 @Query("channel") channel: String? = null): Call<GroupsInfoResponse>
 
     @GET("mpim.replies")
-    fun mpimReplies(@Query("token") token: String,
+    fun mpimReplies(@Query("token") token: String? = null,
                                 @Query("thread_ts") threadTs: Double? = null,
                                 @Query("channel") channel: String? = null): Call<MpimRepliesResponse>
 
     @POST("pins.remove")
-    fun pinsRemove(@Header("Authorization") authorization: String, @Body request: PinsRemoveRequest): Call<PinsRemoveResponse>
+    fun pinsRemove(@Header("Authorization") authorization: String, @Body request: PinsRemoveRequest): Call<GenericResponse>
 
     @GET("conversations.history")
-    fun conversationsHistory(@Query("token") token: String,
+    fun conversationsHistory(@Query("token") token: String? = null,
                                 @Query("inclusive") inclusive: Boolean? = null,
                                 @Query("oldest") oldest: Double? = null,
                                 @Query("channel") channel: String? = null,
@@ -256,13 +256,13 @@ interface SlackService {
     fun remindersAdd(@Header("Authorization") authorization: String, @Body request: RemindersAddRequest): Call<RemindersAddResponse>
 
     @POST("reactions.remove")
-    fun reactionsRemove(@Header("Authorization") authorization: String, @Body request: ReactionsRemoveRequest): Call<ReactionsRemoveResponse>
+    fun reactionsRemove(@Header("Authorization") authorization: String, @Body request: ReactionsRemoveRequest): Call<GenericResponse>
 
     @GET("users.identity")
-    fun usersIdentity(@Query("token") token: String): Call<UsersIdentityResponse>
+    fun usersIdentity(@Query("token") token: String? = null): Call<UsersIdentityResponse>
 
     @GET("groups.list")
-    fun groupsList(@Query("token") token: String,
+    fun groupsList(@Query("token") token: String? = null,
                                 @Query("exclude_members") excludeMembers: Boolean? = null,
                                 @Query("exclude_archived") excludeArchived: Boolean? = null,
                                 @Query("cursor") cursor: String? = null,
@@ -272,22 +272,22 @@ interface SlackService {
     fun channelsCreate(@Header("Authorization") authorization: String, @Body request: ChannelsCreateRequest): Call<ChannelsCreateResponse>
 
     @POST("mpim.close")
-    fun mpimClose(@Header("Authorization") authorization: String, @Body request: MpimCloseRequest): Call<MpimCloseResponse>
+    fun mpimClose(@Header("Authorization") authorization: String, @Body request: MpimCloseRequest): Call<GenericResponse>
 
     @POST("users.setActive")
-    fun usersSetActive(@Header("Authorization") authorization: String, @Body request: UsersSetActiveRequest): Call<UsersSetActiveResponse>
+    fun usersSetActive(@Header("Authorization") authorization: String, @Body request: UsersSetActiveRequest): Call<GenericResponse>
 
     @POST("usergroups.enable")
     fun usergroupsEnable(@Header("Authorization") authorization: String, @Body request: UsergroupsEnableRequest): Call<UsergroupsEnableResponse>
 
     @POST("channels.leave")
-    fun channelsLeave(@Header("Authorization") authorization: String, @Body request: ChannelsLeaveRequest): Call<ChannelsLeaveResponse>
+    fun channelsLeave(@Header("Authorization") authorization: String, @Body request: ChannelsLeaveRequest): Call<GenericResponse>
 
     @POST("admin.users.session.reset")
-    fun adminUsersSessionReset(@Header("Authorization") authorization: String, @Body request: AdminUsersSessionResetRequest): Call<AdminUsersSessionResetResponse>
+    fun adminUsersSessionReset(@Header("Authorization") authorization: String, @Body request: AdminUsersSessionResetRequest): Call<GenericResponse>
 
     @GET("reactions.get")
-    fun reactionsGet(@Query("token") token: String,
+    fun reactionsGet(@Query("token") token: String? = null,
                                 @Query("full") full: Boolean? = null,
                                 @Query("file_comment") fileComment: String? = null,
                                 @Query("timestamp") timestamp: Double? = null,
@@ -298,7 +298,7 @@ interface SlackService {
     fun conversationsInvite(@Header("Authorization") authorization: String, @Body request: ConversationsInviteRequest): Call<ConversationsInviteResponse>
 
     @POST("groups.mark")
-    fun groupsMark(@Header("Authorization") authorization: String, @Body request: GroupsMarkRequest): Call<GroupsMarkResponse>
+    fun groupsMark(@Header("Authorization") authorization: String, @Body request: GroupsMarkRequest): Call<GenericResponse>
 
     @POST("conversations.create")
     fun conversationsCreate(@Header("Authorization") authorization: String, @Body request: ConversationsCreateRequest): Call<ConversationsCreateResponse>
@@ -308,31 +308,31 @@ interface SlackService {
 
     @GET("api.test")
     fun apiTest(@Query("foo") foo: String? = null,
-                                @Query("error") error: String? = null): Call<ApiTestResponse>
+                                @Query("error") error: String? = null): Call<GenericResponse>
 
     @GET("chat.getPermalink")
-    fun chatGetPermalink(@Query("token") token: String,
+    fun chatGetPermalink(@Query("token") token: String? = null,
                                 @Query("message_ts") messageTs: Double? = null,
                                 @Query("channel") channel: String? = null): Call<ChatGetPermalinkResponse>
 
     @GET("apps.permissions.scopes.list")
-    fun appsPermissionsScopesList(@Query("token") token: String): Call<AppsPermissionsScopesListResponse>
+    fun appsPermissionsScopesList(@Query("token") token: String? = null): Call<AppsPermissionsScopesListResponse>
 
     @GET("users.list")
-    fun usersList(@Query("token") token: String,
+    fun usersList(@Query("token") token: String? = null,
                                 @Query("include_locale") includeLocale: Boolean? = null,
                                 @Query("cursor") cursor: String? = null,
                                 @Query("limit") limit: Long? = null): Call<UsersListResponse>
 
     @GET("dnd.teamInfo")
-    fun dndTeamInfo(@Query("token") token: String,
+    fun dndTeamInfo(@Query("token") token: String? = null,
                                 @Query("users") users: String? = null): Call<DndTeamInfoResponse>
 
     @POST("chat.postEphemeral")
     fun chatPostEphemeral(@Header("Authorization") authorization: String, @Body request: ChatPostEphemeralRequest): Call<ChatPostEphemeralResponse>
 
     @GET("groups.history")
-    fun groupsHistory(@Query("token") token: String,
+    fun groupsHistory(@Query("token") token: String? = null,
                                 @Query("count") count: Long? = null,
                                 @Query("unreads") unreads: Boolean? = null,
                                 @Query("inclusive") inclusive: Boolean? = null,
@@ -341,12 +341,12 @@ interface SlackService {
                                 @Query("latest") latest: Double? = null): Call<GroupsHistoryResponse>
 
     @GET("im.list")
-    fun imList(@Query("token") token: String,
+    fun imList(@Query("token") token: String? = null,
                                 @Query("cursor") cursor: String? = null,
                                 @Query("limit") limit: Long? = null): Call<ImListResponse>
 
     @GET("mpim.list")
-    fun mpimList(@Query("token") token: String,
+    fun mpimList(@Query("token") token: String? = null,
                                 @Query("cursor") cursor: String? = null,
                                 @Query("limit") limit: Long? = null): Call<MpimListResponse>
 
@@ -357,7 +357,7 @@ interface SlackService {
     fun channelsJoin(@Header("Authorization") authorization: String, @Body request: ChannelsJoinRequest): Call<ChannelsJoinResponse>
 
     @GET("conversations.info")
-    fun conversationsInfo(@Query("token") token: String,
+    fun conversationsInfo(@Query("token") token: String? = null,
                                 @Query("include_num_members") includeNumMembers: Boolean? = null,
                                 @Query("channel") channel: String? = null,
                                 @Query("include_locale") includeLocale: Boolean? = null): Call<ConversationsInfoResponse>
@@ -381,14 +381,14 @@ interface SlackService {
     fun filesRevokePublicURL(@Header("Authorization") authorization: String, @Body request: FilesRevokePublicURLRequest): Call<FilesRevokePublicURLResponse>
 
     @POST("conversations.unarchive")
-    fun conversationsUnarchive(@Header("Authorization") authorization: String, @Body request: ConversationsUnarchiveRequest): Call<ConversationsUnarchiveResponse>
+    fun conversationsUnarchive(@Header("Authorization") authorization: String, @Body request: ConversationsUnarchiveRequest): Call<GenericResponse>
 
     @GET("team.profile.get")
-    fun teamProfileGet(@Query("token") token: String,
+    fun teamProfileGet(@Query("token") token: String? = null,
                                 @Query("visibility") visibility: String? = null): Call<TeamProfileGetResponse>
 
     @GET("conversations.list")
-    fun conversationsList(@Query("token") token: String,
+    fun conversationsList(@Query("token") token: String? = null,
                                 @Query("exclude_archived") excludeArchived: Boolean? = null,
                                 @Query("types") types: String? = null,
                                 @Query("cursor") cursor: String? = null,
@@ -398,7 +398,7 @@ interface SlackService {
     fun usergroupsCreate(@Header("Authorization") authorization: String, @Body request: UsergroupsCreateRequest): Call<UsergroupsCreateResponse>
 
     @GET("channels.history")
-    fun channelsHistory(@Query("token") token: String,
+    fun channelsHistory(@Query("token") token: String? = null,
                                 @Query("count") count: Long? = null,
                                 @Query("unreads") unreads: Boolean? = null,
                                 @Query("inclusive") inclusive: Boolean? = null,
@@ -407,7 +407,7 @@ interface SlackService {
                                 @Query("latest") latest: Double? = null): Call<ChannelsHistoryResponse>
 
     @GET("stars.list")
-    fun starsList(@Query("token") token: String,
+    fun starsList(@Query("token") token: String? = null,
                                 @Query("count") count: String? = null,
                                 @Query("page") page: String? = null,
                                 @Query("cursor") cursor: String? = null,
@@ -417,42 +417,42 @@ interface SlackService {
     fun groupsInvite(@Header("Authorization") authorization: String, @Body request: GroupsInviteRequest): Call<GroupsInviteResponse>
 
     @POST("groups.archive")
-    fun groupsArchive(@Header("Authorization") authorization: String, @Body request: GroupsArchiveRequest): Call<GroupsArchiveResponse>
+    fun groupsArchive(@Header("Authorization") authorization: String, @Body request: GroupsArchiveRequest): Call<GenericResponse>
 
     @GET("usergroups.list")
-    fun usergroupsList(@Query("token") token: String,
+    fun usergroupsList(@Query("token") token: String? = null,
                                 @Query("include_users") includeUsers: Boolean? = null,
                                 @Query("include_count") includeCount: Boolean? = null,
                                 @Query("include_disabled") includeDisabled: Boolean? = null): Call<UsergroupsListResponse>
 
     @POST("users.setPresence")
-    fun usersSetPresence(@Header("Authorization") authorization: String, @Body request: UsersSetPresenceRequest): Call<UsersSetPresenceResponse>
+    fun usersSetPresence(@Header("Authorization") authorization: String, @Body request: UsersSetPresenceRequest): Call<GenericResponse>
 
     @POST("files.sharedPublicURL")
     fun filesSharedPublicURL(@Header("Authorization") authorization: String, @Body request: FilesSharedPublicURLRequest): Call<FilesSharedPublicURLResponse>
 
     @POST("groups.leave")
-    fun groupsLeave(@Header("Authorization") authorization: String, @Body request: GroupsLeaveRequest): Call<GroupsLeaveResponse>
+    fun groupsLeave(@Header("Authorization") authorization: String, @Body request: GroupsLeaveRequest): Call<GenericResponse>
 
     @POST("pins.add")
-    fun pinsAdd(@Header("Authorization") authorization: String, @Body request: PinsAddRequest): Call<PinsAddResponse>
+    fun pinsAdd(@Header("Authorization") authorization: String, @Body request: PinsAddRequest): Call<GenericResponse>
 
     @POST("conversations.leave")
     fun conversationsLeave(@Header("Authorization") authorization: String, @Body request: ConversationsLeaveRequest): Call<ConversationsLeaveResponse>
 
     @GET("users.profile.get")
-    fun usersProfileGet(@Query("token") token: String,
+    fun usersProfileGet(@Query("token") token: String? = null,
                                 @Query("include_labels") includeLabels: Boolean? = null,
                                 @Query("user") user: String? = null): Call<UsersProfileGetResponse>
 
     @POST("channels.kick")
-    fun channelsKick(@Header("Authorization") authorization: String, @Body request: ChannelsKickRequest): Call<ChannelsKickResponse>
+    fun channelsKick(@Header("Authorization") authorization: String, @Body request: ChannelsKickRequest): Call<GenericResponse>
 
     @POST("im.mark")
-    fun imMark(@Header("Authorization") authorization: String, @Body request: ImMarkRequest): Call<ImMarkResponse>
+    fun imMark(@Header("Authorization") authorization: String, @Body request: ImMarkRequest): Call<GenericResponse>
 
     @POST("reactions.add")
-    fun reactionsAdd(@Header("Authorization") authorization: String, @Body request: ReactionsAddRequest): Call<ReactionsAddResponse>
+    fun reactionsAdd(@Header("Authorization") authorization: String, @Body request: ReactionsAddRequest): Call<GenericResponse>
 
     @POST("dnd.setSnooze")
     fun dndSetSnooze(@Header("Authorization") authorization: String, @Body request: DndSetSnoozeRequest): Call<DndSetSnoozeResponse>
@@ -461,13 +461,13 @@ interface SlackService {
     fun imClose(@Header("Authorization") authorization: String, @Body request: ImCloseRequest): Call<ImCloseResponse>
 
     @POST("conversations.kick")
-    fun conversationsKick(@Header("Authorization") authorization: String, @Body request: ConversationsKickRequest): Call<ConversationsKickResponse>
+    fun conversationsKick(@Header("Authorization") authorization: String, @Body request: ConversationsKickRequest): Call<GenericResponse>
 
     @POST("reminders.delete")
-    fun remindersDelete(@Header("Authorization") authorization: String, @Body request: RemindersDeleteRequest): Call<RemindersDeleteResponse>
+    fun remindersDelete(@Header("Authorization") authorization: String, @Body request: RemindersDeleteRequest): Call<GenericResponse>
 
     @GET("im.history")
-    fun imHistory(@Query("token") token: String,
+    fun imHistory(@Query("token") token: String? = null,
                                 @Query("count") count: Long? = null,
                                 @Query("unreads") unreads: Boolean? = null,
                                 @Query("inclusive") inclusive: Boolean? = null,
@@ -482,7 +482,7 @@ interface SlackService {
     fun groupsRename(@Header("Authorization") authorization: String, @Body request: GroupsRenameRequest): Call<GroupsRenameResponse>
 
     @GET("reactions.list")
-    fun reactionsList(@Query("token") token: String,
+    fun reactionsList(@Query("token") token: String? = null,
                                 @Query("count") count: String? = null,
                                 @Query("full") full: Boolean? = null,
                                 @Query("user") user: String? = null,
@@ -497,7 +497,7 @@ interface SlackService {
     fun chatDelete(@Header("Authorization") authorization: String, @Body request: ChatDeleteRequest): Call<ChatDeleteResponse>
 
     @GET("rtm.connect")
-    fun rtmConnect(@Query("token") token: String,
+    fun rtmConnect(@Query("token") token: String? = null,
                                 @Query("presence_sub") presenceSub: Boolean? = null,
                                 @Query("batch_presence_aware") batchPresenceAware: Boolean? = null): Call<RtmConnectResponse>
 
@@ -506,15 +506,15 @@ interface SlackService {
                                 @Query("code") code: String? = null,
                                 @Query("single_channel") singleChannel: Boolean? = null,
                                 @Query("client_id") clientId: String? = null,
-                                @Query("redirect_uri") redirectUri: String? = null): Call<OauthTokenResponse>
+                                @Query("redirect_uri") redirectUri: String? = null): Call<GenericResponse>
 
     @GET("apps.permissions.users.list")
-    fun appsPermissionsUsersList(@Query("token") token: String,
+    fun appsPermissionsUsersList(@Query("token") token: String? = null,
                                 @Query("cursor") cursor: String? = null,
-                                @Query("limit") limit: Long? = null): Call<AppsPermissionsUsersListResponse>
+                                @Query("limit") limit: Long? = null): Call<GenericResponse>
 
     @GET("conversations.replies")
-    fun conversationsReplies(@Query("token") token: String,
+    fun conversationsReplies(@Query("token") token: String? = null,
                                 @Query("inclusive") inclusive: Boolean? = null,
                                 @Query("ts") ts: Double? = null,
                                 @Query("oldest") oldest: Double? = null,
@@ -524,25 +524,25 @@ interface SlackService {
                                 @Query("limit") limit: Long? = null): Call<ConversationsRepliesResponse>
 
     @GET("reminders.list")
-    fun remindersList(@Query("token") token: String): Call<RemindersListResponse>
+    fun remindersList(@Query("token") token: String? = null): Call<RemindersListResponse>
 
     @POST("usergroups.users.update")
     fun usergroupsUsersUpdate(@Header("Authorization") authorization: String, @Body request: UsergroupsUsersUpdateRequest): Call<UsergroupsUsersUpdateResponse>
 
     @GET("users.info")
-    fun usersInfo(@Query("token") token: String,
+    fun usersInfo(@Query("token") token: String? = null,
                                 @Query("user") user: String? = null,
                                 @Query("include_locale") includeLocale: Boolean? = null): Call<UsersInfoResponse>
 
     @GET("dnd.info")
-    fun dndInfo(@Query("token") token: String,
+    fun dndInfo(@Query("token") token: String? = null,
                                 @Query("user") user: String? = null): Call<DndInfoResponse>
 
     @POST("reminders.complete")
-    fun remindersComplete(@Header("Authorization") authorization: String, @Body request: RemindersCompleteRequest): Call<RemindersCompleteResponse>
+    fun remindersComplete(@Header("Authorization") authorization: String, @Body request: RemindersCompleteRequest): Call<GenericResponse>
 
     @GET("mpim.history")
-    fun mpimHistory(@Query("token") token: String,
+    fun mpimHistory(@Query("token") token: String? = null,
                                 @Query("count") count: Long? = null,
                                 @Query("unreads") unreads: Boolean? = null,
                                 @Query("inclusive") inclusive: Boolean? = null,
@@ -554,11 +554,11 @@ interface SlackService {
     fun usergroupsUsersList(): Call<UsergroupsUsersListResponse>
 
     @GET("reminders.info")
-    fun remindersInfo(@Query("token") token: String,
+    fun remindersInfo(@Query("token") token: String? = null,
                                 @Query("reminder") reminder: String? = null): Call<RemindersInfoResponse>
 
     @POST("channels.archive")
-    fun channelsArchive(@Header("Authorization") authorization: String, @Body request: ChannelsArchiveRequest): Call<ChannelsArchiveResponse>
+    fun channelsArchive(@Header("Authorization") authorization: String, @Body request: ChannelsArchiveRequest): Call<GenericResponse>
 
     @POST("channels.setTopic")
     fun channelsSetTopic(@Header("Authorization") authorization: String, @Body request: ChannelsSetTopicRequest): Call<ChannelsSetTopicResponse>
@@ -567,14 +567,14 @@ interface SlackService {
     fun migrationExchange(): Call<MigrationExchangeResponse>
 
     @GET("dialog.open")
-    fun dialogOpen(): Call<DialogOpenResponse>
+    fun dialogOpen(): Call<GenericResponse>
 
     @GET("users.getPresence")
-    fun usersGetPresence(@Query("token") token: String,
+    fun usersGetPresence(@Query("token") token: String? = null,
                                 @Query("user") user: String? = null): Call<UsersGetPresenceResponse>
 
     @GET("apps.permissions.resources.list")
-    fun appsPermissionsResourcesList(@Query("token") token: String,
+    fun appsPermissionsResourcesList(@Query("token") token: String? = null,
                                 @Query("cursor") cursor: String? = null,
                                 @Query("limit") limit: Long? = null): Call<AppsPermissionsResourcesListResponse>
 
@@ -582,20 +582,20 @@ interface SlackService {
     fun conversationsSetPurpose(@Header("Authorization") authorization: String, @Body request: ConversationsSetPurposeRequest): Call<ConversationsSetPurposeResponse>
 
     @POST("stars.remove")
-    fun starsRemove(@Header("Authorization") authorization: String, @Body request: StarsRemoveRequest): Call<StarsRemoveResponse>
+    fun starsRemove(@Header("Authorization") authorization: String, @Body request: StarsRemoveRequest): Call<GenericResponse>
 
     @POST("dnd.endDnd")
-    fun dndEndDnd(@Header("Authorization") authorization: String, @Body request: DndEndDndRequest): Call<DndEndDndResponse>
+    fun dndEndDnd(@Header("Authorization") authorization: String, @Body request: DndEndDndRequest): Call<GenericResponse>
 
     @GET("users.lookupByEmail")
-    fun usersLookupByEmail(@Query("token") token: String,
+    fun usersLookupByEmail(@Query("token") token: String? = null,
                                 @Query("email") email: String? = null): Call<UsersLookupByEmailResponse>
 
     @POST("users.profile.set")
     fun usersProfileSet(@Header("Authorization") authorization: String, @Body request: UsersProfileSetRequest): Call<UsersProfileSetResponse>
 
     @GET("auth.revoke")
-    fun authRevoke(@Query("token") token: String,
+    fun authRevoke(@Query("token") token: String? = null,
                                 @Query("test") test: Boolean? = null): Call<AuthRevokeResponse>
 
 }

@@ -1,5 +1,8 @@
 package com.anttek.slack.api.request
 
-data class MpimCloseRequest (
+import com.anttek.slack.api.GenericRequest
+
+class MpimCloseRequest (
+         token: String? = null,
         val channel: String? = null
-)
+) : GenericRequest(token)

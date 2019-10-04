@@ -1,6 +1,9 @@
 package com.anttek.slack.api.request
 
-data class ChatPostMessageRequest (
+import com.anttek.slack.api.GenericRequest
+
+class ChatPostMessageRequest (
+         token: String? = null,
         val attachments: String? = null,
         val unfurl_links: Boolean? = null,
         val text: String? = null,
@@ -16,4 +19,4 @@ data class ChatPostMessageRequest (
         val reply_broadcast: Boolean? = null,
         val thread_ts: Double? = null,
         val icon_url: String? = null
-)
+) : GenericRequest(token)

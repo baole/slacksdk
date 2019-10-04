@@ -1,5 +1,8 @@
 package com.anttek.slack.api.request
 
-data class ConversationsArchiveRequest (
+import com.anttek.slack.api.GenericRequest
+
+class ConversationsArchiveRequest (
+         token: String? = null,
         val channel: String? = null
-)
+) : GenericRequest(token)

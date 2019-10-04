@@ -1,6 +1,9 @@
 package com.anttek.slack.api.request
 
-data class ChannelsSetTopicRequest (
+import com.anttek.slack.api.GenericRequest
+
+class ChannelsSetTopicRequest (
+         token: String? = null,
         val topic: String? = null,
         val channel: String? = null
-)
+) : GenericRequest(token)

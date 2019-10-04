@@ -1,5 +1,8 @@
 package com.anttek.slack.api.request
 
-data class GroupsCreateChildRequest (
+import com.anttek.slack.api.GenericRequest
+
+class GroupsCreateChildRequest (
+         token: String? = null,
         val channel: String? = null
-)
+) : GenericRequest(token)

@@ -1,5 +1,8 @@
 package com.anttek.slack.api.request
 
-data class ConversationsLeaveRequest (
+import com.anttek.slack.api.GenericRequest
+
+class ConversationsLeaveRequest (
+         token: String? = null,
         val channel: String? = null
-)
+) : GenericRequest(token)

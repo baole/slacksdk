@@ -1,6 +1,9 @@
 package com.anttek.slack.api.request
 
-data class ChatPostEphemeralRequest (
+import com.anttek.slack.api.GenericRequest
+
+class ChatPostEphemeralRequest (
+         token: String? = null,
         val thread_ts: Double? = null,
         val blocks: String? = null,
         val attachments: String? = null,
@@ -10,4 +13,4 @@ data class ChatPostEphemeralRequest (
         val user: String? = null,
         val link_names: Boolean? = null,
         val channel: String? = null
-)
+) : GenericRequest(token)

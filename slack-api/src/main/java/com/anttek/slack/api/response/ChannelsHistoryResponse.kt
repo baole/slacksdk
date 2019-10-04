@@ -1,9 +1,9 @@
 package com.anttek.slack.api.response
 import com.anttek.slack.api.model.*
-import com.anttek.slack.api.BaseResponse
+import com.anttek.slack.api.GenericResponse
 
 class ChannelsHistoryResponse (
     var isLimited: Boolean? = null,
     var messages: ArrayList<Message>,
     var hasMore: Boolean
-): BaseResponse()
+): GenericResponse()

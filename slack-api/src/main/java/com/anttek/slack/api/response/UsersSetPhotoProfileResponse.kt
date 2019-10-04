@@ -1,6 +1,6 @@
 package com.anttek.slack.api.response
 import com.anttek.slack.api.model.*
-import com.anttek.slack.api.BaseResponse
+import com.anttek.slack.api.GenericResponse
 
 class UsersSetPhotoProfileResponse (
     var image32: String,
@@ -12,4 +12,4 @@ class UsersSetPhotoProfileResponse (
     var avatarHash: String,
     var image72: String,
     var image512: String
-): BaseResponse()
+): GenericResponse()

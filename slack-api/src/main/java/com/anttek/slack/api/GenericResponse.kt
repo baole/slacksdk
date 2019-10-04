@@ -5,7 +5,7 @@ package com.anttek.slack.api
  */
 
 
-open class BaseResponse {
+open class GenericResponse {
     var ok: Boolean = false
     var error: String? = null
     var warning: String? = null

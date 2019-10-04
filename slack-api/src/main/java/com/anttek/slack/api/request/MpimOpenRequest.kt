@@ -1,5 +1,8 @@
 package com.anttek.slack.api.request
 
-data class MpimOpenRequest (
+import com.anttek.slack.api.GenericRequest
+
+class MpimOpenRequest (
+         token: String? = null,
         val users: String? = null
-)
+) : GenericRequest(token)
