@@ -1,7 +1,7 @@
 package com.anttek.slack.api.model
 
 class User{
-    var id: String? = null
+    lateinit var id: String
     var deleted: Boolean? = false
     var name: String? = null
     var is_admin: Boolean = false
@@ -21,8 +21,8 @@ class User{
     var tz_offset: Int? = 0
 
 
-    fun avatar(): String {
-        return  (if (image_48 != null) image_48!! else if (profile != null) profile!!.image48!! else "")
+    fun avatar(): String? {
+        return  image_48?: profile?.image48
     }
 
     fun isAliveHuman(): Boolean {
