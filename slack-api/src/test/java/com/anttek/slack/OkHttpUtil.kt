@@ -8,7 +8,7 @@ object OkHttpUtil {
     fun okHttpClient(): OkHttpClient {
         val builder = OkHttpClient.Builder()
         val logging = HttpLoggingInterceptor()
-        logging.level = HttpLoggingInterceptor.Level.BODY
+        logging.level = HttpLoggingInterceptor.Level.BASIC
         builder.addInterceptor(logging)
         return builder.build()
     }
