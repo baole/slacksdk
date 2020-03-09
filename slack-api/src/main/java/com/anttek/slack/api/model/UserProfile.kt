@@ -1,11 +1,15 @@
 package com.anttek.slack.api.model
 
+import com.fasterxml.jackson.annotation.JsonProperty
+
 class UserProfile (
     var image32: String? = null,
     var statusEmoji: String? = null,
     var guestInvitedBy: String? = null,
     var apiAppId: String? = null,
+    @JsonProperty(value = "image_192")
     var image192: String? = null,
+    @JsonProperty(value = "real_name")
     var realName: String,
     var title: String? = null,
     var statusTextCanonical: String? = null,
@@ -15,16 +19,23 @@ class UserProfile (
     var guestExpirationTs: Long? = null,
     var realNameNormalized: String,
     var avatarHash: String,
+    @JsonProperty(value = "first_name")
     var firstName: String? = null,
     var botId: String? = null,
     var email: String? = null,
+    @JsonProperty(value = "image_512")
     var image512: String? = null,
+    @JsonProperty(value = "image_1024")
     var image1024: String? = null,
     var teams: String? = null,
+    @JsonProperty(value = "image_24")
     var image24: String? = null,
+    @JsonProperty(value = "last_name")
     var lastName: String? = null,
+    @JsonProperty(value = "image_48")
     var image48: String? = null,
     var team: String? = null,
+    @JsonProperty(value = "display_name")
     var displayName: String,
     var alwaysActive: Boolean? = null,
     var statusExpiration: Long? = null,
