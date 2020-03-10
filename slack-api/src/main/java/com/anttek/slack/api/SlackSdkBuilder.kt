@@ -1,7 +1,9 @@
 package com.anttek.slack.api
 
+import com.fasterxml.jackson.databind.ObjectMapper
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit.Builder
+import retrofit2.converter.jackson.JacksonConverterFactory
 
 /**
  * Created by duc-d on 8/24/2017.
@@ -12,9 +14,13 @@ class SlackSdkBuilder(private val client: OkHttpClient? = null, private val mapp
     }
 
     fun build(): SlackSdk {
-        val httpClient = client ?: OkHttpClient.Builder().build()
+        val httpClient = client ?: OkHttpClient
+                .Builder()
+                .build()
+
+        // TODO objectmapper.configure
         val service = Builder()
-                .addConverterFactory(SlackConverterFactory.create())
+                .addConverterFactory(JacksonConverterFactory.create(ObjectMapper()))
                 .baseUrl(SLACK_API_ENDPOINT)
                 .client(httpClient)
                 .build()

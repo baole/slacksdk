@@ -27,19 +27,10 @@ public class SlackConverterFactory extends Converter.Factory {
     }
 
     private final ObjectMapper mapper;
-    private final Gson gson;
 
     private SlackConverterFactory() {
         this.mapper = new ObjectMapper();
         this.mapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
-        this.gson = new Gson();
-    }
-
-    @Override
-    public Converter<ResponseBody, ?> responseBodyConverter(Type type, Annotation[] annotations,
-                                                            Retrofit retrofit) {
-        TypeAdapter<?> adapter = gson.getAdapter(TypeToken.get(type));
-        return new GsonResponseBodyConverter<>(gson, adapter);
     }
 
     @Override

@@ -1,10 +1,12 @@
 package com.anttek.slack.api
+
 import com.anttek.slack.api.request.*
 import com.anttek.slack.api.response.*
+import com.fasterxml.jackson.databind.ObjectMapper
 
 class SlackSdk(private val service: SlackService, private val mapper: Mapper, private var token: String = "") : BaseSlackSdk() {
     fun token(token: String): SlackSdk {
-         this.token = token
+        this.token = token
         return this
     }
 
@@ -25,16 +27,16 @@ class SlackSdk(private val service: SlackService, private val mapper: Mapper, pr
     }
 
     fun chatScheduledMessagesList(token: String? = null,
-                                oldest: Double? = null,
-                                channel: String? = null,
-                                latest: Double? = null,
-                                cursor: String? = null,
-                                limit: Long? = null): SlackResponse<ChatScheduledMessagesListResponse> {
+                                  oldest: Double? = null,
+                                  channel: String? = null,
+                                  latest: Double? = null,
+                                  cursor: String? = null,
+                                  limit: Long? = null): SlackResponse<ChatScheduledMessagesListResponse> {
         return getResponse(service.chatScheduledMessagesList(resolveGetToken(token), oldest, channel, latest, cursor, limit))
     }
 
     fun pinsList(token: String? = null,
-                                channel: String? = null): SlackResponse<PinsListResponse> {
+                 channel: String? = null): SlackResponse<PinsListResponse> {
         return getResponse(service.pinsList(resolveGetToken(token), channel))
     }
 
@@ -47,8 +49,8 @@ class SlackSdk(private val service: SlackService, private val mapper: Mapper, pr
     }
 
     fun channelsReplies(token: String? = null,
-                                threadTs: Double? = null,
-                                channel: String? = null): SlackResponse<ChannelsRepliesResponse> {
+                        threadTs: Double? = null,
+                        channel: String? = null): SlackResponse<ChannelsRepliesResponse> {
         return getResponse(service.channelsReplies(resolveGetToken(token), threadTs, channel))
     }
 
@@ -57,20 +59,20 @@ class SlackSdk(private val service: SlackService, private val mapper: Mapper, pr
     }
 
     fun oauthAccess(code: String? = null,
-                                redirectUri: String? = null,
-                                clientId: String? = null,
-                                clientSecret: String? = null,
-                                singleChannel: Boolean? = null): SlackResponse<OauthAccessResponse> {
+                    redirectUri: String? = null,
+                    clientId: String? = null,
+                    clientSecret: String? = null,
+                    singleChannel: Boolean? = null): SlackResponse<OauthAccessResponse> {
         return getResponse(service.oauthAccess(code, redirectUri, clientId, clientSecret, singleChannel))
     }
 
     fun botsInfo(token: String? = null,
-                                bot: String? = null): SlackResponse<BotsInfoResponse> {
+                 bot: String? = null): SlackResponse<BotsInfoResponse> {
         return getResponse(service.botsInfo(resolveGetToken(token), bot))
     }
 
     fun teamInfo(token: String? = null,
-                                team: String? = null): SlackResponse<TeamInfoResponse> {
+                 team: String? = null): SlackResponse<TeamInfoResponse> {
         return getResponse(service.teamInfo(resolveGetToken(token), team))
     }
 
@@ -79,14 +81,14 @@ class SlackSdk(private val service: SlackService, private val mapper: Mapper, pr
     }
 
     fun groupsReplies(token: String? = null,
-                                threadTs: Double? = null,
-                                channel: String? = null): SlackResponse<GroupsRepliesResponse> {
+                      threadTs: Double? = null,
+                      channel: String? = null): SlackResponse<GroupsRepliesResponse> {
         return getResponse(service.groupsReplies(resolveGetToken(token), threadTs, channel))
     }
 
     fun channelsInfo(token: String? = null,
-                                includeLocale: Boolean? = null,
-                                channel: String? = null): SlackResponse<ChannelsInfoResponse> {
+                     includeLocale: Boolean? = null,
+                     channel: String? = null): SlackResponse<ChannelsInfoResponse> {
         return getResponse(service.channelsInfo(resolveGetToken(token), includeLocale, channel))
     }
 
@@ -99,11 +101,11 @@ class SlackSdk(private val service: SlackService, private val mapper: Mapper, pr
     }
 
     fun filesInfo(token: String? = null,
-                                count: String? = null,
-                                file: String? = null,
-                                page: String? = null,
-                                cursor: String? = null,
-                                limit: Long? = null): SlackResponse<FilesInfoResponse> {
+                  count: String? = null,
+                  file: String? = null,
+                  page: String? = null,
+                  cursor: String? = null,
+                  limit: Long? = null): SlackResponse<FilesInfoResponse> {
         return getResponse(service.filesInfo(resolveGetToken(token), count, file, page, cursor, limit))
     }
 
@@ -112,12 +114,12 @@ class SlackSdk(private val service: SlackService, private val mapper: Mapper, pr
     }
 
     fun teamIntegrationLogs(token: String? = null,
-                                count: String? = null,
-                                changeType: String? = null,
-                                appId: Long? = null,
-                                user: String? = null,
-                                serviceId: Long? = null,
-                                page: String? = null): SlackResponse<TeamIntegrationLogsResponse> {
+                            count: String? = null,
+                            changeType: String? = null,
+                            appId: Long? = null,
+                            user: String? = null,
+                            serviceId: Long? = null,
+                            page: String? = null): SlackResponse<TeamIntegrationLogsResponse> {
         return getResponse(service.teamIntegrationLogs(resolveGetToken(token), count, changeType, appId, user, serviceId, page))
     }
 
@@ -134,17 +136,17 @@ class SlackSdk(private val service: SlackService, private val mapper: Mapper, pr
     }
 
     fun channelsList(token: String? = null,
-                                excludeMembers: Boolean? = null,
-                                excludeArchived: Boolean? = null,
-                                cursor: String? = null,
-                                limit: Long? = null): SlackResponse<ChannelsListResponse> {
+                     excludeMembers: Boolean? = null,
+                     excludeArchived: Boolean? = null,
+                     cursor: String? = null,
+                     limit: Long? = null): SlackResponse<ChannelsListResponse> {
         return getResponse(service.channelsList(resolveGetToken(token), excludeMembers, excludeArchived, cursor, limit))
     }
 
     fun conversationsMembers(token: String? = null,
-                                channel: String? = null,
-                                cursor: String? = null,
-                                limit: Long? = null): SlackResponse<ConversationsMembersResponse> {
+                             channel: String? = null,
+                             cursor: String? = null,
+                             limit: Long? = null): SlackResponse<ConversationsMembersResponse> {
         return getResponse(service.conversationsMembers(resolveGetToken(token), channel, cursor, limit))
     }
 
@@ -161,19 +163,19 @@ class SlackSdk(private val service: SlackService, private val mapper: Mapper, pr
     }
 
     fun appsPermissionsRequest(token: String? = null,
-                                scopes: String? = null,
-                                triggerId: String? = null): SlackResponse<GenericResponse> {
+                               scopes: String? = null,
+                               triggerId: String? = null): SlackResponse<GenericResponse> {
         return getResponse(service.appsPermissionsRequest(resolveGetToken(token), scopes, triggerId))
     }
 
     fun filesList(token: String? = null,
-                                count: String? = null,
-                                channel: String? = null,
-                                tsTo: Double? = null,
-                                tsFrom: Double? = null,
-                                user: String? = null,
-                                page: String? = null,
-                                types: String? = null): SlackResponse<FilesListResponse> {
+                  count: String? = null,
+                  channel: String? = null,
+                  tsTo: Double? = null,
+                  tsFrom: Double? = null,
+                  user: String? = null,
+                  page: String? = null,
+                  types: String? = null): SlackResponse<FilesListResponse> {
         return getResponse(service.filesList(resolveGetToken(token), count, channel, tsTo, tsFrom, user, page, types))
     }
 
@@ -194,11 +196,11 @@ class SlackSdk(private val service: SlackService, private val mapper: Mapper, pr
     }
 
     fun usersConversations(token: String? = null,
-                                user: String? = null,
-                                excludeArchived: Boolean? = null,
-                                types: String? = null,
-                                cursor: String? = null,
-                                limit: Long? = null): SlackResponse<UsersConversationsResponse> {
+                           user: String? = null,
+                           excludeArchived: Boolean? = null,
+                           types: String? = null,
+                           cursor: String? = null,
+                           limit: Long? = null): SlackResponse<UsersConversationsResponse> {
         return getResponse(service.usersConversations(resolveGetToken(token), user, excludeArchived, types, cursor, limit))
     }
 
@@ -223,9 +225,9 @@ class SlackSdk(private val service: SlackService, private val mapper: Mapper, pr
     }
 
     fun appsPermissionsUsersRequest(token: String? = null,
-                                scopes: String? = null,
-                                user: String? = null,
-                                triggerId: String? = null): SlackResponse<GenericResponse> {
+                                    scopes: String? = null,
+                                    user: String? = null,
+                                    triggerId: String? = null): SlackResponse<GenericResponse> {
         return getResponse(service.appsPermissionsUsersRequest(resolveGetToken(token), scopes, user, triggerId))
     }
 
@@ -238,15 +240,15 @@ class SlackSdk(private val service: SlackService, private val mapper: Mapper, pr
     }
 
     fun appsUninstall(token: String? = null,
-                                clientSecret: String? = null,
-                                clientId: String? = null): SlackResponse<GenericResponse> {
+                      clientSecret: String? = null,
+                      clientId: String? = null): SlackResponse<GenericResponse> {
         return getResponse(service.appsUninstall(resolveGetToken(token), clientSecret, clientId))
     }
 
     fun teamAccessLogs(token: String? = null,
-                                count: String? = null,
-                                page: String? = null,
-                                before: Long? = null): SlackResponse<TeamAccessLogsResponse> {
+                       count: String? = null,
+                       page: String? = null,
+                       before: Long? = null): SlackResponse<TeamAccessLogsResponse> {
         return getResponse(service.teamAccessLogs(resolveGetToken(token), count, page, before))
     }
 
@@ -263,18 +265,18 @@ class SlackSdk(private val service: SlackService, private val mapper: Mapper, pr
     }
 
     fun imReplies(token: String? = null,
-                                threadTs: Double? = null,
-                                channel: String? = null): SlackResponse<ImRepliesResponse> {
+                  threadTs: Double? = null,
+                  channel: String? = null): SlackResponse<ImRepliesResponse> {
         return getResponse(service.imReplies(resolveGetToken(token), threadTs, channel))
     }
 
     fun searchMessages(token: String? = null,
-                                sortDir: String? = null,
-                                query: String? = null,
-                                sort: String? = null,
-                                count: String? = null,
-                                highlight: Boolean? = null,
-                                page: String? = null): SlackResponse<GenericResponse> {
+                       sortDir: String? = null,
+                       query: String? = null,
+                       sort: String? = null,
+                       count: String? = null,
+                       highlight: Boolean? = null,
+                       page: String? = null): SlackResponse<GenericResponse> {
         return getResponse(service.searchMessages(resolveGetToken(token), sortDir, query, sort, count, highlight, page))
     }
 
@@ -283,14 +285,14 @@ class SlackSdk(private val service: SlackService, private val mapper: Mapper, pr
     }
 
     fun groupsInfo(token: String? = null,
-                                includeLocale: Boolean? = null,
-                                channel: String? = null): SlackResponse<GroupsInfoResponse> {
+                   includeLocale: Boolean? = null,
+                   channel: String? = null): SlackResponse<GroupsInfoResponse> {
         return getResponse(service.groupsInfo(resolveGetToken(token), includeLocale, channel))
     }
 
     fun mpimReplies(token: String? = null,
-                                threadTs: Double? = null,
-                                channel: String? = null): SlackResponse<MpimRepliesResponse> {
+                    threadTs: Double? = null,
+                    channel: String? = null): SlackResponse<MpimRepliesResponse> {
         return getResponse(service.mpimReplies(resolveGetToken(token), threadTs, channel))
     }
 
@@ -299,12 +301,12 @@ class SlackSdk(private val service: SlackService, private val mapper: Mapper, pr
     }
 
     fun conversationsHistory(token: String? = null,
-                                inclusive: Boolean? = null,
-                                oldest: Double? = null,
-                                channel: String? = null,
-                                latest: Double? = null,
-                                cursor: String? = null,
-                                limit: Long? = null): SlackResponse<ConversationsHistoryResponse> {
+                             inclusive: Boolean? = null,
+                             oldest: Double? = null,
+                             channel: String? = null,
+                             latest: Double? = null,
+                             cursor: String? = null,
+                             limit: Long? = null): SlackResponse<ConversationsHistoryResponse> {
         return getResponse(service.conversationsHistory(resolveGetToken(token), inclusive, oldest, channel, latest, cursor, limit))
     }
 
@@ -321,10 +323,10 @@ class SlackSdk(private val service: SlackService, private val mapper: Mapper, pr
     }
 
     fun groupsList(token: String? = null,
-                                excludeMembers: Boolean? = null,
-                                excludeArchived: Boolean? = null,
-                                cursor: String? = null,
-                                limit: Long? = null): SlackResponse<GroupsListResponse> {
+                   excludeMembers: Boolean? = null,
+                   excludeArchived: Boolean? = null,
+                   cursor: String? = null,
+                   limit: Long? = null): SlackResponse<GroupsListResponse> {
         return getResponse(service.groupsList(resolveGetToken(token), excludeMembers, excludeArchived, cursor, limit))
     }
 
@@ -353,11 +355,11 @@ class SlackSdk(private val service: SlackService, private val mapper: Mapper, pr
     }
 
     fun reactionsGet(token: String? = null,
-                                full: Boolean? = null,
-                                fileComment: String? = null,
-                                timestamp: Double? = null,
-                                file: String? = null,
-                                channel: String? = null): SlackResponse<ReactionsGetResponse> {
+                     full: Boolean? = null,
+                     fileComment: String? = null,
+                     timestamp: Double? = null,
+                     file: String? = null,
+                     channel: String? = null): SlackResponse<ReactionsGetResponse> {
         return getResponse(service.reactionsGet(resolveGetToken(token), full, fileComment, timestamp, file, channel))
     }
 
@@ -378,13 +380,13 @@ class SlackSdk(private val service: SlackService, private val mapper: Mapper, pr
     }
 
     fun apiTest(foo: String? = null,
-                                error: String? = null): SlackResponse<GenericResponse> {
+                error: String? = null): SlackResponse<GenericResponse> {
         return getResponse(service.apiTest(foo, error))
     }
 
     fun chatGetPermalink(token: String? = null,
-                                messageTs: Double? = null,
-                                channel: String? = null): SlackResponse<ChatGetPermalinkResponse> {
+                         messageTs: Double? = null,
+                         channel: String? = null): SlackResponse<ChatGetPermalinkResponse> {
         return getResponse(service.chatGetPermalink(resolveGetToken(token), messageTs, channel))
     }
 
@@ -393,14 +395,14 @@ class SlackSdk(private val service: SlackService, private val mapper: Mapper, pr
     }
 
     fun usersList(token: String? = null,
-                                includeLocale: Boolean? = null,
-                                cursor: String? = null,
-                                limit: Long? = null): SlackResponse<UsersListResponse> {
+                  includeLocale: Boolean? = null,
+                  cursor: String? = null,
+                  limit: Long? = null): SlackResponse<UsersListResponse> {
         return getResponse(service.usersList(resolveGetToken(token), includeLocale, cursor, limit))
     }
 
     fun dndTeamInfo(token: String? = null,
-                                users: String? = null): SlackResponse<DndTeamInfoResponse> {
+                    users: String? = null): SlackResponse<DndTeamInfoResponse> {
         return getResponse(service.dndTeamInfo(resolveGetToken(token), users))
     }
 
@@ -409,24 +411,24 @@ class SlackSdk(private val service: SlackService, private val mapper: Mapper, pr
     }
 
     fun groupsHistory(token: String? = null,
-                                count: Long? = null,
-                                unreads: Boolean? = null,
-                                inclusive: Boolean? = null,
-                                oldest: Double? = null,
-                                channel: String? = null,
-                                latest: Double? = null): SlackResponse<GroupsHistoryResponse> {
+                      count: Long? = null,
+                      unreads: Boolean? = null,
+                      inclusive: Boolean? = null,
+                      oldest: Double? = null,
+                      channel: String? = null,
+                      latest: Double? = null): SlackResponse<GroupsHistoryResponse> {
         return getResponse(service.groupsHistory(resolveGetToken(token), count, unreads, inclusive, oldest, channel, latest))
     }
 
     fun imList(token: String? = null,
-                                cursor: String? = null,
-                                limit: Long? = null): SlackResponse<ImListResponse> {
+               cursor: String? = null,
+               limit: Long? = null): SlackResponse<ImListResponse> {
         return getResponse(service.imList(resolveGetToken(token), cursor, limit))
     }
 
     fun mpimList(token: String? = null,
-                                cursor: String? = null,
-                                limit: Long? = null): SlackResponse<MpimListResponse> {
+                 cursor: String? = null,
+                 limit: Long? = null): SlackResponse<MpimListResponse> {
         return getResponse(service.mpimList(resolveGetToken(token), cursor, limit))
     }
 
@@ -439,9 +441,9 @@ class SlackSdk(private val service: SlackService, private val mapper: Mapper, pr
     }
 
     fun conversationsInfo(token: String? = null,
-                                includeNumMembers: Boolean? = null,
-                                channel: String? = null,
-                                includeLocale: Boolean? = null): SlackResponse<ConversationsInfoResponse> {
+                          includeNumMembers: Boolean? = null,
+                          channel: String? = null,
+                          includeLocale: Boolean? = null): SlackResponse<ConversationsInfoResponse> {
         return getResponse(service.conversationsInfo(resolveGetToken(token), includeNumMembers, channel, includeLocale))
     }
 
@@ -474,15 +476,15 @@ class SlackSdk(private val service: SlackService, private val mapper: Mapper, pr
     }
 
     fun teamProfileGet(token: String? = null,
-                                visibility: String? = null): SlackResponse<TeamProfileGetResponse> {
+                       visibility: String? = null): SlackResponse<TeamProfileGetResponse> {
         return getResponse(service.teamProfileGet(resolveGetToken(token), visibility))
     }
 
     fun conversationsList(token: String? = null,
-                                excludeArchived: Boolean? = null,
-                                types: String? = null,
-                                cursor: String? = null,
-                                limit: Long? = null): SlackResponse<ConversationsListResponse> {
+                          excludeArchived: Boolean? = null,
+                          types: String? = null,
+                          cursor: String? = null,
+                          limit: Long? = null): SlackResponse<ConversationsListResponse> {
         return getResponse(service.conversationsList(resolveGetToken(token), excludeArchived, types, cursor, limit))
     }
 
@@ -491,20 +493,20 @@ class SlackSdk(private val service: SlackService, private val mapper: Mapper, pr
     }
 
     fun channelsHistory(token: String? = null,
-                                count: Long? = null,
-                                unreads: Boolean? = null,
-                                inclusive: Boolean? = null,
-                                oldest: Double? = null,
-                                channel: String? = null,
-                                latest: Double? = null): SlackResponse<ChannelsHistoryResponse> {
+                        count: Long? = null,
+                        unreads: Boolean? = null,
+                        inclusive: Boolean? = null,
+                        oldest: Double? = null,
+                        channel: String? = null,
+                        latest: Double? = null): SlackResponse<ChannelsHistoryResponse> {
         return getResponse(service.channelsHistory(resolveGetToken(token), count, unreads, inclusive, oldest, channel, latest))
     }
 
     fun starsList(token: String? = null,
-                                count: String? = null,
-                                page: String? = null,
-                                cursor: String? = null,
-                                limit: Long? = null): SlackResponse<StarsListResponse> {
+                  count: String? = null,
+                  page: String? = null,
+                  cursor: String? = null,
+                  limit: Long? = null): SlackResponse<StarsListResponse> {
         return getResponse(service.starsList(resolveGetToken(token), count, page, cursor, limit))
     }
 
@@ -517,9 +519,9 @@ class SlackSdk(private val service: SlackService, private val mapper: Mapper, pr
     }
 
     fun usergroupsList(token: String? = null,
-                                includeUsers: Boolean? = null,
-                                includeCount: Boolean? = null,
-                                includeDisabled: Boolean? = null): SlackResponse<UsergroupsListResponse> {
+                       includeUsers: Boolean? = null,
+                       includeCount: Boolean? = null,
+                       includeDisabled: Boolean? = null): SlackResponse<UsergroupsListResponse> {
         return getResponse(service.usergroupsList(resolveGetToken(token), includeUsers, includeCount, includeDisabled))
     }
 
@@ -544,8 +546,8 @@ class SlackSdk(private val service: SlackService, private val mapper: Mapper, pr
     }
 
     fun usersProfileGet(token: String? = null,
-                                includeLabels: Boolean? = null,
-                                user: String? = null): SlackResponse<UsersProfileGetResponse> {
+                        includeLabels: Boolean? = null,
+                        user: String? = null): SlackResponse<UsersProfileGetResponse> {
         return getResponse(service.usersProfileGet(resolveGetToken(token), includeLabels, user))
     }
 
@@ -578,12 +580,12 @@ class SlackSdk(private val service: SlackService, private val mapper: Mapper, pr
     }
 
     fun imHistory(token: String? = null,
-                                count: Long? = null,
-                                unreads: Boolean? = null,
-                                inclusive: Boolean? = null,
-                                oldest: Double? = null,
-                                channel: String? = null,
-                                latest: Double? = null): SlackResponse<ImHistoryResponse> {
+                  count: Long? = null,
+                  unreads: Boolean? = null,
+                  inclusive: Boolean? = null,
+                  oldest: Double? = null,
+                  channel: String? = null,
+                  latest: Double? = null): SlackResponse<ImHistoryResponse> {
         return getResponse(service.imHistory(resolveGetToken(token), count, unreads, inclusive, oldest, channel, latest))
     }
 
@@ -596,12 +598,12 @@ class SlackSdk(private val service: SlackService, private val mapper: Mapper, pr
     }
 
     fun reactionsList(token: String? = null,
-                                count: String? = null,
-                                full: Boolean? = null,
-                                user: String? = null,
-                                page: String? = null,
-                                cursor: String? = null,
-                                limit: Long? = null): SlackResponse<ReactionsListResponse> {
+                      count: String? = null,
+                      full: Boolean? = null,
+                      user: String? = null,
+                      page: String? = null,
+                      cursor: String? = null,
+                      limit: Long? = null): SlackResponse<ReactionsListResponse> {
         return getResponse(service.reactionsList(resolveGetToken(token), count, full, user, page, cursor, limit))
     }
 
@@ -614,33 +616,33 @@ class SlackSdk(private val service: SlackService, private val mapper: Mapper, pr
     }
 
     fun rtmConnect(token: String? = null,
-                                presenceSub: Boolean? = null,
-                                batchPresenceAware: Boolean? = null): SlackResponse<RtmConnectResponse> {
+                   presenceSub: Boolean? = null,
+                   batchPresenceAware: Boolean? = null): SlackResponse<RtmConnectResponse> {
         return getResponse(service.rtmConnect(resolveGetToken(token), presenceSub, batchPresenceAware))
     }
 
     fun oauthToken(clientSecret: String? = null,
-                                code: String? = null,
-                                singleChannel: Boolean? = null,
-                                clientId: String? = null,
-                                redirectUri: String? = null): SlackResponse<GenericResponse> {
+                   code: String? = null,
+                   singleChannel: Boolean? = null,
+                   clientId: String? = null,
+                   redirectUri: String? = null): SlackResponse<GenericResponse> {
         return getResponse(service.oauthToken(clientSecret, code, singleChannel, clientId, redirectUri))
     }
 
     fun appsPermissionsUsersList(token: String? = null,
-                                cursor: String? = null,
-                                limit: Long? = null): SlackResponse<GenericResponse> {
+                                 cursor: String? = null,
+                                 limit: Long? = null): SlackResponse<GenericResponse> {
         return getResponse(service.appsPermissionsUsersList(resolveGetToken(token), cursor, limit))
     }
 
     fun conversationsReplies(token: String? = null,
-                                inclusive: Boolean? = null,
-                                ts: Double? = null,
-                                oldest: Double? = null,
-                                channel: String? = null,
-                                latest: Double? = null,
-                                cursor: String? = null,
-                                limit: Long? = null): SlackResponse<ConversationsRepliesResponse> {
+                             inclusive: Boolean? = null,
+                             ts: Double? = null,
+                             oldest: Double? = null,
+                             channel: String? = null,
+                             latest: Double? = null,
+                             cursor: String? = null,
+                             limit: Long? = null): SlackResponse<ConversationsRepliesResponse> {
         return getResponse(service.conversationsReplies(resolveGetToken(token), inclusive, ts, oldest, channel, latest, cursor, limit))
     }
 
@@ -653,13 +655,13 @@ class SlackSdk(private val service: SlackService, private val mapper: Mapper, pr
     }
 
     fun usersInfo(token: String? = null,
-                                user: String? = null,
-                                includeLocale: Boolean? = null): SlackResponse<UsersInfoResponse> {
+                  user: String? = null,
+                  includeLocale: Boolean? = null): SlackResponse<UsersInfoResponse> {
         return getResponse(service.usersInfo(resolveGetToken(token), user, includeLocale))
     }
 
     fun dndInfo(token: String? = null,
-                                user: String? = null): SlackResponse<DndInfoResponse> {
+                user: String? = null): SlackResponse<DndInfoResponse> {
         return getResponse(service.dndInfo(resolveGetToken(token), user))
     }
 
@@ -668,12 +670,12 @@ class SlackSdk(private val service: SlackService, private val mapper: Mapper, pr
     }
 
     fun mpimHistory(token: String? = null,
-                                count: Long? = null,
-                                unreads: Boolean? = null,
-                                inclusive: Boolean? = null,
-                                oldest: Double? = null,
-                                channel: String? = null,
-                                latest: Double? = null): SlackResponse<MpimHistoryResponse> {
+                    count: Long? = null,
+                    unreads: Boolean? = null,
+                    inclusive: Boolean? = null,
+                    oldest: Double? = null,
+                    channel: String? = null,
+                    latest: Double? = null): SlackResponse<MpimHistoryResponse> {
         return getResponse(service.mpimHistory(resolveGetToken(token), count, unreads, inclusive, oldest, channel, latest))
     }
 
@@ -682,7 +684,7 @@ class SlackSdk(private val service: SlackService, private val mapper: Mapper, pr
     }
 
     fun remindersInfo(token: String? = null,
-                                reminder: String? = null): SlackResponse<RemindersInfoResponse> {
+                      reminder: String? = null): SlackResponse<RemindersInfoResponse> {
         return getResponse(service.remindersInfo(resolveGetToken(token), reminder))
     }
 
@@ -703,13 +705,13 @@ class SlackSdk(private val service: SlackService, private val mapper: Mapper, pr
     }
 
     fun usersGetPresence(token: String? = null,
-                                user: String? = null): SlackResponse<UsersGetPresenceResponse> {
+                         user: String? = null): SlackResponse<UsersGetPresenceResponse> {
         return getResponse(service.usersGetPresence(resolveGetToken(token), user))
     }
 
     fun appsPermissionsResourcesList(token: String? = null,
-                                cursor: String? = null,
-                                limit: Long? = null): SlackResponse<AppsPermissionsResourcesListResponse> {
+                                     cursor: String? = null,
+                                     limit: Long? = null): SlackResponse<AppsPermissionsResourcesListResponse> {
         return getResponse(service.appsPermissionsResourcesList(resolveGetToken(token), cursor, limit))
     }
 
@@ -726,7 +728,7 @@ class SlackSdk(private val service: SlackService, private val mapper: Mapper, pr
     }
 
     fun usersLookupByEmail(token: String? = null,
-                                email: String? = null): SlackResponse<UsersLookupByEmailResponse> {
+                           email: String? = null): SlackResponse<UsersLookupByEmailResponse> {
         return getResponse(service.usersLookupByEmail(resolveGetToken(token), email))
     }
 
@@ -735,8 +737,7 @@ class SlackSdk(private val service: SlackService, private val mapper: Mapper, pr
     }
 
     fun authRevoke(token: String? = null,
-                                test: Boolean? = null): SlackResponse<AuthRevokeResponse> {
+                   test: Boolean? = null): SlackResponse<AuthRevokeResponse> {
         return getResponse(service.authRevoke(resolveGetToken(token), test))
     }
-
 }
