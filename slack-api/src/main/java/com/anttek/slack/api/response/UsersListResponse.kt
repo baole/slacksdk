@@ -1,8 +1,9 @@
 package com.anttek.slack.api.response
-import com.anttek.slack.api.model.*
-import com.anttek.slack.api.GenericResponse
 
-class UsersListResponse (
-    var cacheTs: Long,
-    var members: ArrayList<User>
-): GenericResponse()
+import com.anttek.slack.api.GenericResponse
+import com.anttek.slack.api.model.User
+
+class UsersListResponse() : GenericResponse() {
+    var cacheTs: Long? = null
+    var members: ArrayList<User>? = ArrayList()
+}

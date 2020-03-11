@@ -1,14 +1,20 @@
 package com.anttek.slack.api.model
 
-class User{
+import com.fasterxml.jackson.annotation.JsonProperty
+import com.sun.javaws.LaunchDownload
+
+class User() {
     lateinit var id: String
     var deleted: Boolean? = false
     var name: String? = null
     var is_admin: Boolean = false
     var image_48: String? = null
     var profile: UserProfile? = null
+    @JsonProperty(value="is_bot")
     var is_bot: Boolean? = null
+    @JsonProperty(value="is_app_user")
     var is_app_user: Boolean? = null
+    var updated: Long? = null
 
     //When a user belongs to a different workspace than the workspace/team associated with your app's token and isn't in any shared channels that your app can see, they will have an is_stranger attribute set to true.
     var is_stranger: Boolean? = null
@@ -22,7 +28,7 @@ class User{
 
 
     fun avatar(): String? {
-        return  image_48?: profile?.image48
+        return image_48 ?: profile?.image48
     }
 
     fun isAliveHuman(): Boolean {
@@ -32,8 +38,9 @@ class User{
     fun isDeleted() = (deleted != null && deleted!!)
 
     fun isHuman(): Boolean {
-        return (is_bot == null || !is_bot!!) && (is_app_user == null || !is_app_user!!) && !"slackbot".equals(name)
+        return updated != null && "slackbot" != name && is_bot != true
     }
+
     fun isExternal(): Boolean {
         return is_stranger == true || is_restricted == true || is_ultra_restricted == true
     }
